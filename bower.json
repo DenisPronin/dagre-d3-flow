@@ -1,0 +1,25 @@
+{
+  "name": "dagre-d3-flow",
+  "version": "0.0.0",
+  "homepage": "https://github.com/DenisPronin/dagre-d3-flow",
+  "authors": [
+    "pronin <denis.pronin@sibers.com>"
+  ],
+  "keywords": [
+    "dag",
+    "graph",
+    "d3"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "dagre-d3": "~0.4.10",
+    "d3": "~3.5.6"
+  }
+}

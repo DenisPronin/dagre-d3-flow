@@ -1,0 +1,42 @@
+scss_files: "**/*.scss"
+
+linters:
+  IdSelector:
+    enabled: false
+
+  LeadingZero:
+    enabled: false
+
+  SelectorFormat:
+    enabled: false
+
+  QualifyingElement:
+    enabled: true
+    allow_element_with_attribute: enabled
+    allow_element_with_class: enabled
+    allow_element_with_id: false
+
+  PropertySortOrder:
+    enabled: false
+
+  HexNotation:
+    enabled: false
+
+  ImportantRule:
+    enabled: false
+
+  StringQuotes:
+    enabled: false
+
+  NestingDepth:
+    max_depth: 6
+
+  SelectorDepth:
+    enabled: true
+    max_depth: 6
+
+  Shorthand:
+    enabled: false
+
+  DuplicateProperty:
+    enabled: false
