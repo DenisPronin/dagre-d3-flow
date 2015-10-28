@@ -5,48 +5,66 @@
 
     var svg;
     var graph;
-    var render;
+    var renderer;
 
-    var init = function (_svg, _graph, _render) {
+    var init = function (_svg, _graph, _renderer) {
         svg = _svg;
         graph = _graph;
-        render = _render;
+        renderer = _renderer;
 
         GraphModel.create(graph);
-        render(_svg, _graph);
+    };
 
-        let $clusters = _svg.selectAll('.cluster');
-        $clusters.each(function () {
-            let $cluster = d3.select(this);
-            addToggleLink($cluster);
+    var render = function () {
+        renderer(svg, graph);
+        addLinks();
+    };
+
+    var addLinks = function () {
+        let clusters = GraphModel.getClusters();
+        clusters.forEach(function (cluster) {
+            addToggleLink(cluster);
         });
     };
 
-    var addToggleLink = function ($cluster) {
-        let $rect = $cluster.select('rect');
+    var addToggleLink = function (clusterObj) {
+        let $elem = findClusterElem(clusterObj.id);
+        if($elem[0].length === 0) {
+            return false;
+        }
+
+        let $rect = $elem.select('rect');
         let x = $rect.attr('x');
         let y = $rect.attr('y');
 
-        $cluster.classed('expanded', true);
-        let $toggleGroup = $cluster.append('g');
+        var text = 'Expand';
+        if(clusterObj.cluster.isExpanded) {
+            $elem.classed('expanded', true);
+            text = 'Collapse';
+        }
+        let $toggleGroup = $elem.append('g');
         $toggleGroup.classed('toggle-link', true);
-
         let $textLabel = $toggleGroup.append('text');
         $textLabel
-            .text('Collapse')
+            .text(text)
             .attr('x', x)
             .attr('y', y);
 
-
         $textLabel.on('click', function (clusterId) {
-            if($cluster.classed('expanded')) {
-                collapseCluster($cluster, clusterId);
+            if($elem.classed('expanded')) {
+                collapseCluster($elem, clusterId);
             }
             else {
-                expandCluster($cluster, clusterId);
+                expandCluster($elem, clusterId);
             }
         });
+    };
 
+    var findClusterElem = function (clusterId) {
+        var elems = svg.selectAll('.cluster,.node');
+        return elems.filter(function (id) {
+           return id === clusterId
+        });
     };
 
     var collapseCluster = function ($cluster, clusterId) {
@@ -68,7 +86,7 @@
                 graph.setEdge(clusterId, edge.w);
             });
         }
-        render(svg, graph);
+        render();
     };
 
     var expandCluster = function ($cluster, clusterId) {
@@ -78,7 +96,8 @@
     };
 
     module.exports = {
-        init: init
+        init: init,
+        render: render
     };
 
 })();

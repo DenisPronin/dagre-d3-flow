@@ -68,6 +68,7 @@
                 svgGroup = svg.append("g");
 
         DagreFlow.init(svgGroup, g, render);
+        DagreFlow.render();
 
         // Center the graph
         var xCenterOffset = (svg.attr("width") - g.graph().width) / 2;

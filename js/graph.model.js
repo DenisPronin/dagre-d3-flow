@@ -11,11 +11,22 @@
         return flow.nodes;
     };
 
+    var getClusters = function () {
+        var clusters = [];
+        Object.keys(flow.nodes).forEach(function (nodeId) {
+            if(flow.nodes[nodeId].isCluster) {
+                clusters.push(flow.nodes[nodeId]);
+            }
+        });
+        return clusters;
+    };
+
     var create = function (graph) {
         flow.nodes = {};
         for(let _nodeId of Object.keys(graph._nodes)) {
             flow.nodes[_nodeId] = {};
             let flowNode = flow.nodes[_nodeId];
+            flowNode.id = _nodeId;
             flowNode.properties = graph._nodes[_nodeId];
 
             flowNode.children = getChildren(graph, _nodeId);
@@ -131,6 +142,7 @@
         create: create,
         getFlow: getFlow,
         getNodes: getNodes,
+        getClusters: getClusters,
         expandCluster: expandCluster,
         collapseCluster: collapseCluster
     };
