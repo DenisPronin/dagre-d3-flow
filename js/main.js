@@ -63,7 +63,7 @@
     var findClusterElem = function (clusterId) {
         var elems = svg.selectAll('.cluster,.node');
         return elems.filter(function (id) {
-           return id === clusterId
+           return id === clusterId;
         });
     };
 
@@ -80,10 +80,18 @@
             }
 
             edges.outer.input.forEach(function (edge) {
-                graph.setEdge(edge.v, clusterId);
+                let link = edge.v;
+                if(edge.linkToCluster && !nodes[edge.linkToCluster].cluster.isExpanded) {
+                    link = edge.linkToCluster;
+                }
+                graph.setEdge(link, clusterId);
             });
             edges.outer.output.forEach(function (edge) {
-                graph.setEdge(clusterId, edge.w);
+                let link = edge.w;
+                if(edge.linkToCluster && !nodes[edge.linkToCluster].cluster.isExpanded) {
+                    link = edge.linkToCluster;
+                }
+                graph.setEdge(clusterId, link);
             });
         }
         render();

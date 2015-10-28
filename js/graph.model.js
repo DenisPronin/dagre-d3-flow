@@ -12,7 +12,7 @@
     };
 
     var getClusters = function () {
-        var clusters = [];
+        let clusters = [];
         Object.keys(flow.nodes).forEach(function (nodeId) {
             if(flow.nodes[nodeId].isCluster) {
                 clusters.push(flow.nodes[nodeId]);
@@ -38,7 +38,7 @@
             }
 
         }
-
+        setClustersLinks();
         graph._flow = flow;
     };
 
@@ -100,10 +100,10 @@
                     return _node === _edge.w;
                 });
                 if(nodes.length > 0) {
-                    edges.inner.push(_edge);
+                    edges.inner.push({v: _edge.v, w: _edge.w});
                 }
                 else {
-                    edges.outer.output.push(_edge);
+                    edges.outer.output.push({v: _edge.v, w: _edge.w});
                 }
             }
 
@@ -114,12 +114,42 @@
                     return _node === _edge.v;
                 });
                 if (nodes.length === 0) {
-                    edges.outer.input.push(_edge);
+                    edges.outer.input.push({v: _edge.v, w: _edge.w});
                 }
             }
         }
 
         return edges;
+    };
+
+    var setClustersLinks = function () {
+        let clusters = getClusters();
+        for(let clusterNode of clusters) {
+            let outputEdges = clusterNode.cluster.edges.outer.output;
+            for(let edge of outputEdges) {
+                let linkCluster = findClusterByInnerEdge(edge, clusterNode.id);
+                if(linkCluster) {
+                    edge.linkToCluster = linkCluster.id;
+                }
+            }
+        }
+    };
+
+    var findClusterByInnerEdge = function (edge, linkId) {
+        let clusters = getClusters();
+        let resCluster = null;
+        for (let clusterNode of clusters) {
+            let edges = clusterNode.cluster.edges.outer.input;
+            let res = edges.filter(function (_edge) {
+                return JSON.stringify(edge) === JSON.stringify(_edge);
+            });
+            if(res.length > 0) {
+                res[0].linkToCluster = linkId;
+                resCluster = clusterNode;
+                break;
+            }
+        }
+        return resCluster;
     };
 
     var isCluster = function (cluster) {
