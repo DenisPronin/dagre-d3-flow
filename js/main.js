@@ -52,10 +52,10 @@
 
         $textLabel.on('click', function (clusterId) {
             if($elem.classed('expanded')) {
-                collapseCluster($elem, clusterId);
+                collapseCluster(clusterId);
             }
             else {
-                expandCluster($elem, clusterId);
+                expandCluster(clusterId);
             }
         });
     };
@@ -67,8 +67,7 @@
         });
     };
 
-    var collapseCluster = function ($cluster, clusterId) {
-        $cluster.classed('expanded', false);
+    var collapseCluster = function (clusterId) {
         GraphModel.collapseCluster(clusterId);
         var nodes = GraphModel.getNodes();
         var node = nodes[clusterId];
@@ -97,9 +96,61 @@
         render();
     };
 
-    var expandCluster = function ($cluster, clusterId) {
-        console.log('expand', clusterId);
-        $cluster.classed('expanded', true);
+    var expandCluster = function (clusterId) {
+        GraphModel.expandCluster(clusterId);
+        var nodes = GraphModel.getNodes();
+        var node = nodes[clusterId];
+        if(node.isCluster) {
+            graph.removeNode(clusterId);
+            graph.setNode(clusterId, node.properties);
+            let contents = node.cluster.contents;
+            let edges = node.cluster.edges;
+            let contentsNodes = [];
+            let contentsClusters = [];
+            Object.keys(contents).forEach(function (_id) {
+                if(nodes[_id].isCluster) {
+                    contentsClusters.push(_id);
+                }
+                else {
+                    contentsNodes.push(_id);
+                }
+            });
+
+            for(let _id of contentsNodes) {
+                graph.setNode(_id, nodes[_id].properties);
+                graph.setParent(_id, clusterId);
+            }
+            for(let _id of contentsClusters) {
+                graph.setNode(_id, nodes[_id].properties);
+                graph.setParent(_id, clusterId);
+                for (var contentId in nodes[_id].cluster.contents) {
+                    graph.setParent(contentId, _id);
+                }
+            }
+            for(let parentId of Object.keys(node.parents)) {
+                graph.setParent(clusterId, parentId);
+            }
+
+            edges.inner.forEach(function (edge) {
+                graph.setEdge(edge.v, edge.w);
+            });
+            edges.outer.input.forEach(function (edge) {
+                let link = edge.v;
+                if(edge.linkToCluster && !nodes[edge.linkToCluster].cluster.isExpanded) {
+                    link = edge.linkToCluster;
+                }
+                graph.setEdge(link, edge.w);
+            });
+            edges.outer.output.forEach(function (edge) {
+                let link = edge.w;
+                if(edge.linkToCluster && !nodes[edge.linkToCluster].cluster.isExpanded) {
+                    link = edge.linkToCluster;
+                }
+                graph.setEdge(edge.v, link);
+            });
+
+        }
+        render();
 
     };
 

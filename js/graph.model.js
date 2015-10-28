@@ -32,13 +32,14 @@
             flowNode.children = getChildren(graph, _nodeId);
             flowNode.parents = getParent(graph, _nodeId);
 
-            flowNode.isCluster = (isCluster(graph._children[_nodeId]));
+            flowNode.isCluster = (isCluster(graph, _nodeId));
             if(flowNode.isCluster) {
                 flowNode.cluster = setCluster(graph, _nodeId);
             }
 
         }
         setClustersLinks();
+        setClustersParents(graph);
         graph._flow = flow;
     };
 
@@ -75,7 +76,7 @@
         let contents = {};
         for(let child of Object.keys(cluster)) {
             contents[child] = true;
-            if(isCluster(graph._children[child])) {
+            if(isCluster(graph, child)) {
                 let innerContent = setClusterContent(graph, graph._children[child]);
                 Object.assign(contents, innerContent);
             }
@@ -135,6 +136,20 @@
         }
     };
 
+    var setClustersParents = function (graph) {
+        let clusters = getClusters();
+        for(let clusterNode of clusters) {
+            let id = clusterNode.id;
+
+            for (let _node of clusters) {
+                if(graph._children[_node.id][id]) {
+                    clusterNode.parents[_node.id] = true;
+                }
+            }
+        }
+
+    };
+
     var findClusterByInnerEdge = function (edge, linkId) {
         let clusters = getClusters();
         let resCluster = null;
@@ -152,8 +167,8 @@
         return resCluster;
     };
 
-    var isCluster = function (cluster) {
-        return (Object.keys(cluster).length > 0);
+    var isCluster = function (graph, _nodeId) {
+        return (Object.keys(graph._children[_nodeId]).length > 0);
     };
 
     var expandCluster = function (clusterId) {
