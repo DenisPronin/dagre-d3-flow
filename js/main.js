@@ -1,6 +1,8 @@
 (function () {
     "use strict";
 
+    var GraphModel = require('./graph.model');
+
     var svg;
     var graph;
     var render;
@@ -9,6 +11,10 @@
         svg = _svg;
         graph = _graph;
         render = _render;
+
+        GraphModel.create(graph);
+        render(_svg, _graph);
+
         let $clusters = _svg.selectAll('.cluster');
         $clusters.each(function () {
             let $cluster = d3.select(this);
@@ -44,88 +50,25 @@
     };
 
     var collapseCluster = function ($cluster, clusterId) {
-        console.log('collapse', clusterId);
         $cluster.classed('expanded', false);
-        $cluster.style('display', 'none');
+        GraphModel.collapseCluster(clusterId);
+        var nodes = GraphModel.getNodes();
+        var node = nodes[clusterId];
+        if(node.isCluster) {
+            var contents = node.cluster.contents;
+            var edges = node.cluster.edges;
+            for(let _id of Object.keys(contents)) {
+                graph.removeNode(_id);
+            }
 
-        let childrenNodes = getChild(clusterId);
-
-        let edges = getEdges(childrenNodes);
-        edges.innerEdges.forEach(function (innerEdge) {
-            let edgePaths = d3.selectAll('.edgePath');
-            edgePaths.each(function (edgeData) {
-                if(_.isEqual(edgeData, innerEdge)) {
-                    this.style.display = 'none';
-                }
+            edges.outer.input.forEach(function (edge) {
+                graph.setEdge(edge.v, clusterId);
             });
-        });
-        var newNodeId = clusterId + '-collapsed';
-        graph.setNode(newNodeId, graph._nodes[clusterId]);
-        if(graph._parent[clusterId] !== '\x00') {
-            graph.setParent(newNodeId, graph._parent[clusterId]);
+            edges.outer.output.forEach(function (edge) {
+                graph.setEdge(clusterId, edge.w);
+            });
         }
-        edges.outerEdges.input.forEach(function (edge) {
-            graph.setEdge(edge.v, newNodeId);
-        });
-        edges.outerEdges.output.forEach(function (edge) {
-            graph.setEdge(newNodeId, edge.w);
-        });
-
-        childrenNodes.forEach(function (child) {
-            child.el.style('display', 'none');
-            //graph.removeNode(child.id);
-        });
-        //graph.removeNode(clusterId);
         render(svg, graph);
-    };
-
-    var getChild = function (clusterId) {
-        let childIds = [];
-        let clusterChildren = graph._children[clusterId];
-        for(let childId in clusterChildren) {
-            let $child = d3.selectAll('.node,.cluster').filter(function (el) {
-                return el === childId;
-            });
-            childIds.push({
-                el: $child,
-                id: childId
-            });
-            childIds = childIds.concat(getChild(childId));
-        }
-        return childIds;
-    };
-
-    var getEdges = function (clusterNodes) {
-        let innerEdges = [];
-        let outerEdges = {
-            input: [],
-            output: []
-        };
-
-        clusterNodes.forEach(function (node) {
-            let outEdges = graph._out[node.id];
-            _.forEach(outEdges, function (edge) {
-                let nodes = _.where(clusterNodes, {id: edge.w});
-                if(nodes.length > 0) {
-                    innerEdges.push(edge);
-                }
-                else {
-                    outerEdges.output.push(edge);
-                }
-            });
-
-            let inEdges = graph._in[node.id];
-            _.forEach(inEdges, function (edge) {
-                let nodes = _.where(clusterNodes, {id: edge.v});
-                if(nodes.length === 0) {
-                    outerEdges.input.push(edge);
-                }
-            });
-        });
-        return {
-            innerEdges: innerEdges,
-            outerEdges: outerEdges
-        };
     };
 
     var expandCluster = function ($cluster, clusterId) {

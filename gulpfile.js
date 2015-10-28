@@ -78,7 +78,7 @@ gulp.task('js', function() {
                 filename: 'dagre-flow.js',
                 sourceMapFilename: 'dagre-flow.map'
             },
-            devtool: '#eval',
+            devtool: 'source-map',
             module: {
                 loaders: [{
                     test: /\.js$/,
