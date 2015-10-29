@@ -8,7 +8,7 @@
 </head>
 <body>
 
-    <svg id="svg-canvas" width=960 height=600></svg>
+    <svg id="svg-canvas" class="svg-dag" width=960 height=600></svg>
 
 
     <script src="../bower_components/d3/d3.min.js"></script>
@@ -32,9 +32,9 @@
         g.setNode('e', {label: 'E'});
         g.setNode('f', {label: 'F'});
         g.setNode('g', {label: 'G'});
-        g.setNode('group', {label: 'Group', clusterLabelPos: 'top', style: 'fill: #d3d7e8'});
-        g.setNode('top_group', {label: 'Top Group', clusterLabelPos: 'bottom', style: 'fill: #ffd47f'});
-        g.setNode('bottom_group', {label: 'Bottom Group', style: 'fill: #5f9488'});
+        g.setNode('group', {label: 'Group', clusterLabelPos: 'top'});
+        g.setNode('top_group', {label: 'Top Group', clusterLabelPos: 'bottom'});
+        g.setNode('bottom_group', {label: 'Bottom Group'});
 
         // Set the parents to define which nodes belong to which cluster
         g.setParent('top_group', 'group');
@@ -53,21 +53,11 @@
         g.setEdge('b', 'f');
         g.setEdge('b', 'g');
 
-        g.nodes().forEach(function(v) {
-            var node = g.node(v);
-            // Round the corners of the nodes
-            node.rx = node.ry = 5;
-        });
-
-
-        // Create the renderer
-        var render = new dagreD3.render();
-
         // Set up an SVG group so that we can translate the final graph.
         var svg = d3.select("svg"),
                 svgGroup = svg.append("g");
 
-        DagreFlow.init(svgGroup, g, render);
+        DagreFlow.init(svgGroup, g);
         DagreFlow.render();
 
         // Center the graph

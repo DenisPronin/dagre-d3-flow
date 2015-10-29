@@ -1,13 +1,11 @@
-svg {
+.svg-dag {
   border: 1px solid #ccc;
-  overflow: hidden;
-  margin: 0 auto;
 }
 
 .clusters rect {
-  fill: #00ffd0;
-  stroke: #999;
-  stroke-width: 1.5px;
+  fill: #FFF;
+  stroke: #4cae4c;
+  stroke-width: 1.25;
 }
 
 text {
@@ -16,15 +14,30 @@ text {
   font-size: 14px;
 }
 
-.node rect {
-  stroke: #999;
-  fill: #fff;
-  stroke-width: 1.5px;
+.node {
+  rect {
+    fill: #5cb85c;
+    stroke: #4cae4c;
+    rx: 3px;
+    ry: 3px;
+  }
+
+  text {
+    fill: #FFF;
+  }
+
 }
 
-.edgePath path {
-  stroke: #333;
-  stroke-width: 2px;
+
+.edgePath {
+  path {
+    stroke: #CCC;
+    stroke-width: 1.5;
+  }
+
+  defs marker {
+    fill: #CCC;
+  }
 }
 
 

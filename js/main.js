@@ -1,7 +1,8 @@
 (function () {
-    "use strict";
+    'use strict';
 
     var GraphModel = require('./graph.model');
+    var Icons = require('./icons');
 
     var svg;
     var graph;
@@ -17,7 +18,29 @@
 
     var render = function () {
         renderer(svg, graph);
+        setClusterLabels();
         addLinks();
+    };
+
+    var setClusterLabels = function () {
+        let nodes = GraphModel.getNodes();
+        let icons = Icons.icons;
+        svg.selectAll('.cluster').each(function(clusterId) {
+            let $cluster = d3.select(this);
+            let $rect = $cluster.select('rect');
+            let $label = $cluster.select('.label g');
+            let $togglePlusLink = $label.insert('path', ':first-child');
+            $togglePlusLink.attr('d', function(d) {
+                return (nodes[clusterId].cluster.isExpanded) ? icons['minus'] : icons['plus'];
+            });
+
+            var width = $rect.attr('width');
+            var height = $rect.attr('height');
+
+            $label.attr('transform',
+                'translate(' + (-width / 2) + ',' + (-height / 2) + ')');
+
+        });
     };
 
     var addLinks = function () {
@@ -37,7 +60,7 @@
         let x = $rect.attr('x');
         let y = $rect.attr('y');
 
-        var text = 'Expand';
+        let text = 'Expand';
         if(clusterObj.cluster.isExpanded) {
             $elem.classed('expanded', true);
             text = 'Collapse';
@@ -61,17 +84,17 @@
     };
 
     var findClusterElem = function (clusterId) {
-        var elems = svg.selectAll('.cluster,.node');
+        let elems = svg.selectAll('.cluster,.node');
         return elems.filter(id => id === clusterId);
     };
 
     var collapseCluster = function (clusterId) {
         GraphModel.collapseCluster(clusterId);
-        var nodes = GraphModel.getNodes();
-        var node = nodes[clusterId];
+        let nodes = GraphModel.getNodes();
+        let node = nodes[clusterId];
         if(node.isCluster) {
-            var contents = node.cluster.contents;
-            var edges = node.cluster.edges;
+            let contents = node.cluster.contents;
+            let edges = node.cluster.edges;
             for(let _id of Object.keys(contents)) {
                 graph.removeNode(_id);
             }
@@ -96,8 +119,8 @@
 
     var expandCluster = function (clusterId) {
         GraphModel.expandCluster(clusterId);
-        var nodes = GraphModel.getNodes();
-        var node = nodes[clusterId];
+        let nodes = GraphModel.getNodes();
+        let node = nodes[clusterId];
         if(node.isCluster) {
             graph.removeNode(clusterId);
             graph.setNode(clusterId, node.properties);
@@ -121,7 +144,7 @@
             for(let _id of contentsClusters) {
                 graph.setNode(_id, nodes[_id].properties);
                 graph.setParent(_id, clusterId);
-                for (var contentId in nodes[_id].cluster.contents) {
+                for (let contentId in nodes[_id].cluster.contents) {
                     graph.setParent(contentId, _id);
                 }
             }
