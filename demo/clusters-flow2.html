@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Dagre D3 Demo: Clusters Flow</title>
+
+    <link rel="stylesheet" href="../dist/dagre-flow.css"/>
+</head>
+<body>
+
+    <svg id="svg-canvas" width=960 height=600></svg>
+
+
+    <script src="../bower_components/d3/d3.min.js"></script>
+    <script src="../bower_components/lodash/lodash.min.js"></script>
+    <script src="../bower_components/graphlib/dist/graphlib.core.js"></script>
+    <script src="../bower_components/dagre/dist/dagre.core.min.js"></script>
+    <script src="../bower_components/dagre-d3/dist/dagre-d3.core.js"></script>
+    <script src="../dist/dagre-flow.js"></script>
+
+    <script>
+        // Create the input graph
+        var g = new dagreD3.graphlib.Graph({compound:true})
+                .setGraph({})
+                .setDefaultEdgeLabel(function() { return {}; });
+
+        // Here we're setting the nodes
+        g.setNode('flows', {label: 'flows'});
+        g.setNode('a', {label: 'embed_1'});
+        g.setNode('b', {label: 'embed_2'});
+        g.setNode('flow1', {label: 'flow1'});
+        g.setNode('c', {label: 'embed_3'});
+        g.setNode('d', {label: 'embed_4'});
+        g.setNode('flow2', {label: 'flow2'});
+        g.setNode('e', {label: 'embed_5'});
+        g.setNode('f', {label: 'embed_6'});
+        g.setNode('g', {label: 'embed_7'});
+        g.setNode('flow3', {label: 'flow3'});
+        g.setNode('h', {label: 'embed_8'});
+        g.setNode('i', {label: 'embed_9'});
+        g.setNode('j', {label: 'embed_10'});
+        g.setNode('k', {label: 'embed_11'});
+
+        // Set the parents to define which nodes belong to which cluster
+        g.setParent('a', 'flows');
+        g.setParent('b', 'flows');
+        g.setParent('flow1', 'flows');
+        g.setParent('flow3', 'flows');
+        g.setParent('k', 'flows');
+
+        g.setParent('c', 'flow1');
+        g.setParent('d', 'flow1');
+        g.setParent('flow2', 'flow1');
+
+        g.setParent('e', 'flow2');
+        g.setParent('f', 'flow2');
+        g.setParent('g', 'flow2');
+
+        g.setParent('h', 'flow3');
+        g.setParent('i', 'flow3');
+        g.setParent('j', 'flow3');
+
+        // Set up edges, no special attributes.
+        g.setEdge('a', 'b');
+        g.setEdge('b', 'c');
+        g.setEdge('b', 'h');
+        g.setEdge('b', 'i');
+        g.setEdge('c', 'd');
+        g.setEdge('d', 'e');
+        g.setEdge('d', 'f');
+        g.setEdge('e', 'g');
+        g.setEdge('f', 'g');
+        g.setEdge('g', 'k');
+        g.setEdge('h', 'j');
+        g.setEdge('i', 'j');
+        g.setEdge('j', 'k');
+
+        g.nodes().forEach(function(v) {
+            var node = g.node(v);
+            // Round the corners of the nodes
+            node.rx = node.ry = 5;
+        });
+
+        // Set up an SVG group so that we can translate the final graph.
+        var svg = d3.select("svg"),
+                svgGroup = svg.append("g");
+
+        DagreFlow.init(svgGroup, g);
+        DagreFlow.render();
+
+        // Center the graph
+        var xCenterOffset = (svg.attr("width") - g.graph().width) / 2;
+        svgGroup.attr("transform", "translate(" + xCenterOffset + ", 20)");
+        svg.attr("height", g.graph().height + 40);
+    </script>
+
+</body>
+</html>
