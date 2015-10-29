@@ -7,10 +7,10 @@
     var graph;
     var renderer;
 
-    var init = function (_svg, _graph, _renderer) {
+    var init = function (_svg, _graph) {
         svg = _svg;
         graph = _graph;
-        renderer = _renderer;
+        renderer = new dagreD3.render();
 
         GraphModel.create(graph);
     };
@@ -22,7 +22,7 @@
 
     var addLinks = function () {
         let clusters = GraphModel.getClusters();
-        clusters.forEach(function (cluster) {
+        clusters.forEach((cluster) => {
             addToggleLink(cluster);
         });
     };
@@ -62,9 +62,7 @@
 
     var findClusterElem = function (clusterId) {
         var elems = svg.selectAll('.cluster,.node');
-        return elems.filter(function (id) {
-           return id === clusterId;
-        });
+        return elems.filter(id => id === clusterId);
     };
 
     var collapseCluster = function (clusterId) {
@@ -78,14 +76,14 @@
                 graph.removeNode(_id);
             }
 
-            edges.outer.input.forEach(function (edge) {
+            edges.outer.input.forEach((edge) => {
                 let link = edge.v;
                 if(edge.linkToCluster && !nodes[edge.linkToCluster].cluster.isExpanded) {
                     link = edge.linkToCluster;
                 }
                 graph.setEdge(link, clusterId);
             });
-            edges.outer.output.forEach(function (edge) {
+            edges.outer.output.forEach((edge) => {
                 let link = edge.w;
                 if(edge.linkToCluster && !nodes[edge.linkToCluster].cluster.isExpanded) {
                     link = edge.linkToCluster;
@@ -107,7 +105,7 @@
             let edges = node.cluster.edges;
             let contentsNodes = [];
             let contentsClusters = [];
-            Object.keys(contents).forEach(function (_id) {
+            Object.keys(contents).forEach((_id) => {
                 if(nodes[_id].isCluster) {
                     contentsClusters.push(_id);
                 }
@@ -131,17 +129,17 @@
                 graph.setParent(clusterId, parentId);
             }
 
-            edges.inner.forEach(function (edge) {
+            edges.inner.forEach((edge) => {
                 graph.setEdge(edge.v, edge.w);
             });
-            edges.outer.input.forEach(function (edge) {
+            edges.outer.input.forEach((edge) => {
                 let link = edge.v;
                 if(edge.linkToCluster && !nodes[edge.linkToCluster].cluster.isExpanded) {
                     link = edge.linkToCluster;
                 }
                 graph.setEdge(link, edge.w);
             });
-            edges.outer.output.forEach(function (edge) {
+            edges.outer.output.forEach((edge) => {
                 let link = edge.w;
                 if(edge.linkToCluster && !nodes[edge.linkToCluster].cluster.isExpanded) {
                     link = edge.linkToCluster;

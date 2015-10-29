@@ -13,7 +13,7 @@
 
     var getClusters = function () {
         let clusters = [];
-        Object.keys(flow.nodes).forEach(function (nodeId) {
+        Object.keys(flow.nodes).forEach((nodeId) => {
             if(flow.nodes[nodeId].isCluster) {
                 clusters.push(flow.nodes[nodeId]);
             }
@@ -97,9 +97,7 @@
             let outEdges = graph._out[nodeId];
             for(let edgeKey of Object.keys(outEdges)) {
                 let _edge = outEdges[edgeKey];
-                let nodes = clusterNodes.filter(function (_node) {
-                    return _node === _edge.w;
-                });
+                let nodes = clusterNodes.filter(_node => _node === _edge.w);
                 if(nodes.length > 0) {
                     edges.inner.push({v: _edge.v, w: _edge.w});
                 }
@@ -111,9 +109,7 @@
             let inEdges = graph._in[nodeId];
             for(let edgeKey of Object.keys(inEdges)) {
                 let _edge = inEdges[edgeKey];
-                let nodes = clusterNodes.filter(function (_node) {
-                    return _node === _edge.v;
-                });
+                let nodes = clusterNodes.filter(_node => _node === _edge.v);
                 if (nodes.length === 0) {
                     edges.outer.input.push({v: _edge.v, w: _edge.w});
                 }
@@ -155,9 +151,7 @@
         let resCluster = null;
         for (let clusterNode of clusters) {
             let edges = clusterNode.cluster.edges.outer.input;
-            let res = edges.filter(function (_edge) {
-                return JSON.stringify(edge) === JSON.stringify(_edge);
-            });
+            let res = edges.filter((_edge) => JSON.stringify(edge) === JSON.stringify(_edge));
             if(res.length > 0) {
                 res[0].linkToCluster = linkId;
                 resCluster = clusterNode;
