@@ -40,3 +40,8 @@ linters:
 
   DuplicateProperty:
     enabled: false
+
+  PropertySpelling:
+    extra_properties:
+      - rx
+      - ry

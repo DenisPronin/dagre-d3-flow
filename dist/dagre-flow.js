@@ -89,7 +89,7 @@ var DagreFlow =
 	
 	        var $togglePlusLink = $label.insert('path', ':first-child');
 	        $togglePlusLink.attr('d', function (d) {
-	            return clusterObj.cluster.isExpanded ? icons['minus'] : icons['plus'];
+	            return clusterObj.cluster.isExpanded ? icons.minus : icons.plus;
 	        }).attr('transform', 'translate(0, -4) scale(0.8)').attr('class', function (d) {
 	            return clusterObj.cluster.isExpanded ? 'toggle-link expanded' : 'toggle-link collapsed';
 	        });
