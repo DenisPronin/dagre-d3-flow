@@ -1,29 +1,59 @@
-svg {
+.svg-dag {
   border: 1px solid #ccc;
-  overflow: hidden;
-  margin: 0 auto;
 }
 
 .clusters rect {
-  fill: #00ffd0;
-  stroke: #999;
-  stroke-width: 1.5px;
+  fill: #FFF;
+  stroke: #4cae4c;
+  stroke-width: 1.25;
+  rx: 3px;
+  ry: 3px;
 }
 
 text {
   font-weight: 300;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serf, serif;
   font-size: 14px;
 }
 
 .node rect {
-  stroke: #999;
-  fill: #fff;
-  stroke-width: 1.5px;
+  fill: #5cb85c;
+  stroke: #4cae4c;
+  rx: 3px;
+  ry: 3px;
+}
+
+.node text {
+  fill: #FFF;
 }
 
 .edgePath path {
-  stroke: #333;
-  stroke-width: 2px;
+  stroke: #CCC;
+  stroke-width: 1.5;
+}
+
+.edgePath defs marker {
+  fill: #CCC;
+}
+
+.toggle-link {
+  cursor: pointer;
+  stroke: #4cae4c;
+}
+
+.toggle-link.expanded {
+  fill: #ccc;
+}
+
+.toggle-link.expanded:hover {
+  fill: #5cb85c;
+}
+
+.toggle-link.collapsed {
+  fill: #fff;
+}
+
+.toggle-link.collapsed:hover {
+  fill: #ccc;
 }
 /*# sourceMappingURL=dagre-flow.css.map */
