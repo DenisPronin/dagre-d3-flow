@@ -71,7 +71,45 @@ var DagreFlow =
 	    var render = function render() {
 	        renderer(svgGroup, graph);
 	        addLinks();
+	        renderStatus();
 	        Zoom.setZoom(svg, svgGroup, graph);
+	    };
+	
+	    var renderStatus = function renderStatus() {
+	        var nodes = GraphModel.getNodes();
+	        var _iteratorNormalCompletion = true;
+	        var _didIteratorError = false;
+	        var _iteratorError = undefined;
+	
+	        try {
+	            for (var _iterator = Object.keys(nodes)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                var nodeId = _step.value;
+	
+	                var node = nodes[nodeId];
+	                if (node.properties.status) {
+	                    setNodeStatus(nodeId, node.properties.status);
+	                }
+	            }
+	        } catch (err) {
+	            _didIteratorError = true;
+	            _iteratorError = err;
+	        } finally {
+	            try {
+	                if (!_iteratorNormalCompletion && _iterator['return']) {
+	                    _iterator['return']();
+	                }
+	            } finally {
+	                if (_didIteratorError) {
+	                    throw _iteratorError;
+	                }
+	            }
+	        }
+	    };
+	
+	    var setNodeStatus = function setNodeStatus(nodeId, status) {
+	        GraphModel.setNodeStatus(nodeId, status);
+	        var $nodeElem = findNodeElem(nodeId);
+	        $nodeElem.classed(status, true);
 	    };
 	
 	    var addLinks = function addLinks() {
@@ -82,7 +120,7 @@ var DagreFlow =
 	    };
 	
 	    var addToggleLink = function addToggleLink(clusterObj) {
-	        var $elem = findClusterElem(clusterObj.id);
+	        var $elem = findNodeElem(clusterObj.id);
 	        if ($elem[0].length === 0) {
 	            return false;
 	        }
@@ -117,10 +155,10 @@ var DagreFlow =
 	        });
 	    };
 	
-	    var findClusterElem = function findClusterElem(clusterId) {
+	    var findNodeElem = function findNodeElem(nodeId) {
 	        var elems = svg.selectAll('.cluster,.node');
 	        return elems.filter(function (id) {
-	            return id === clusterId;
+	            return id === nodeId;
 	        });
 	    };
 	
@@ -131,27 +169,27 @@ var DagreFlow =
 	        if (node.isCluster) {
 	            var contents = node.cluster.contents;
 	            var edges = node.cluster.edges;
-	            var _iteratorNormalCompletion = true;
-	            var _didIteratorError = false;
-	            var _iteratorError = undefined;
+	            var _iteratorNormalCompletion2 = true;
+	            var _didIteratorError2 = false;
+	            var _iteratorError2 = undefined;
 	
 	            try {
-	                for (var _iterator = Object.keys(contents)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	                    var _id = _step.value;
+	                for (var _iterator2 = Object.keys(contents)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	                    var _id = _step2.value;
 	
 	                    graph.removeNode(_id);
 	                }
 	            } catch (err) {
-	                _didIteratorError = true;
-	                _iteratorError = err;
+	                _didIteratorError2 = true;
+	                _iteratorError2 = err;
 	            } finally {
 	                try {
-	                    if (!_iteratorNormalCompletion && _iterator['return']) {
-	                        _iterator['return']();
+	                    if (!_iteratorNormalCompletion2 && _iterator2['return']) {
+	                        _iterator2['return']();
 	                    }
 	                } finally {
-	                    if (_didIteratorError) {
-	                        throw _iteratorError;
+	                    if (_didIteratorError2) {
+	                        throw _iteratorError2;
 	                    }
 	                }
 	            }
@@ -179,14 +217,6 @@ var DagreFlow =
 	        var nodes = GraphModel.getNodes();
 	        var node = nodes[clusterId];
 	        if (node.isCluster) {
-	            var _iteratorNormalCompletion2;
-	
-	            var _didIteratorError2;
-	
-	            var _iteratorError2;
-	
-	            var _iterator2, _step2;
-	
 	            var _iteratorNormalCompletion3;
 	
 	            var _didIteratorError3;
@@ -203,6 +233,14 @@ var DagreFlow =
 	
 	            var _iterator4, _step4;
 	
+	            var _iteratorNormalCompletion5;
+	
+	            var _didIteratorError5;
+	
+	            var _iteratorError5;
+	
+	            var _iterator5, _step5;
+	
 	            (function () {
 	                graph.removeNode(clusterId);
 	                graph.setNode(clusterId, node.properties);
@@ -218,46 +256,16 @@ var DagreFlow =
 	                    }
 	                });
 	
-	                _iteratorNormalCompletion2 = true;
-	                _didIteratorError2 = false;
-	                _iteratorError2 = undefined;
-	
-	                try {
-	                    for (_iterator2 = contentsNodes[Symbol.iterator](); !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-	                        var _id = _step2.value;
-	
-	                        graph.setNode(_id, nodes[_id].properties);
-	                        graph.setParent(_id, clusterId);
-	                    }
-	                } catch (err) {
-	                    _didIteratorError2 = true;
-	                    _iteratorError2 = err;
-	                } finally {
-	                    try {
-	                        if (!_iteratorNormalCompletion2 && _iterator2['return']) {
-	                            _iterator2['return']();
-	                        }
-	                    } finally {
-	                        if (_didIteratorError2) {
-	                            throw _iteratorError2;
-	                        }
-	                    }
-	                }
-	
 	                _iteratorNormalCompletion3 = true;
 	                _didIteratorError3 = false;
 	                _iteratorError3 = undefined;
 	
 	                try {
-	                    for (_iterator3 = contentsClusters[Symbol.iterator](); !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+	                    for (_iterator3 = contentsNodes[Symbol.iterator](); !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
 	                        var _id = _step3.value;
 	
 	                        graph.setNode(_id, nodes[_id].properties);
 	                        graph.setParent(_id, clusterId);
-	                        GraphModel.expandCluster(_id);
-	                        for (var contentId in nodes[_id].cluster.contents) {
-	                            graph.setParent(contentId, _id);
-	                        }
 	                    }
 	                } catch (err) {
 	                    _didIteratorError3 = true;
@@ -279,10 +287,15 @@ var DagreFlow =
 	                _iteratorError4 = undefined;
 	
 	                try {
-	                    for (_iterator4 = Object.keys(node.parents)[Symbol.iterator](); !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-	                        var parentId = _step4.value;
+	                    for (_iterator4 = contentsClusters[Symbol.iterator](); !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+	                        var _id = _step4.value;
 	
-	                        graph.setParent(clusterId, parentId);
+	                        graph.setNode(_id, nodes[_id].properties);
+	                        graph.setParent(_id, clusterId);
+	                        GraphModel.expandCluster(_id);
+	                        for (var contentId in nodes[_id].cluster.contents) {
+	                            graph.setParent(contentId, _id);
+	                        }
 	                    }
 	                } catch (err) {
 	                    _didIteratorError4 = true;
@@ -295,6 +308,31 @@ var DagreFlow =
 	                    } finally {
 	                        if (_didIteratorError4) {
 	                            throw _iteratorError4;
+	                        }
+	                    }
+	                }
+	
+	                _iteratorNormalCompletion5 = true;
+	                _didIteratorError5 = false;
+	                _iteratorError5 = undefined;
+	
+	                try {
+	                    for (_iterator5 = Object.keys(node.parents)[Symbol.iterator](); !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+	                        var parentId = _step5.value;
+	
+	                        graph.setParent(clusterId, parentId);
+	                    }
+	                } catch (err) {
+	                    _didIteratorError5 = true;
+	                    _iteratorError5 = err;
+	                } finally {
+	                    try {
+	                        if (!_iteratorNormalCompletion5 && _iterator5['return']) {
+	                            _iterator5['return']();
+	                        }
+	                    } finally {
+	                        if (_didIteratorError5) {
+	                            throw _iteratorError5;
 	                        }
 	                    }
 	                }
@@ -323,7 +361,8 @@ var DagreFlow =
 	
 	    module.exports = {
 	        init: init,
-	        render: render
+	        render: render,
+	        setNodeStatus: setNodeStatus
 	    };
 	})();
 
@@ -780,13 +819,18 @@ var DagreFlow =
 	        }
 	    };
 	
+	    var setNodeStatus = function setNodeStatus(nodeId, status) {
+	        flow.nodes[nodeId].properties.status = status;
+	    };
+	
 	    module.exports = {
 	        create: create,
 	        getFlow: getFlow,
 	        getNodes: getNodes,
 	        getClusters: getClusters,
 	        expandCluster: expandCluster,
-	        collapseCluster: collapseCluster
+	        collapseCluster: collapseCluster,
+	        setNodeStatus: setNodeStatus
 	    };
 	})();
 

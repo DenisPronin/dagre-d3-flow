@@ -17,23 +17,50 @@ text {
 }
 
 .node rect {
-  fill: #5cb85c;
-  stroke: #4cae4c;
   rx: 3px;
   ry: 3px;
+  fill: #DDD;
+  stroke: #CCC;
 }
 
 .node text {
+  fill: #000;
+}
+
+.node.SUCCESS rect {
+  fill: #5cb85c;
+  stroke: #4cae4c;
+}
+
+.node.SUCCESS text {
   fill: #FFF;
 }
 
-.edgePath path {
-  stroke: #CCC;
-  stroke-width: 1.5;
+.node.FAILED rect {
+  fill: #d2322d;
+  stroke: #d2322d;
 }
 
-.edgePath defs marker {
-  fill: #CCC;
+.node.FAILED text {
+  fill: #FFF;
+}
+
+.node.PENDING rect {
+  fill: #DDD;
+  stroke: #CCC;
+}
+
+.node.PENDING text {
+  fill: #000;
+}
+
+.node.RUNNING rect {
+  fill: #39b3d7;
+  stroke: #39b3d7;
+}
+
+.node.RUNNING text {
+  fill: #FFF;
 }
 
 .toggle-link {
@@ -54,6 +81,15 @@ text {
 }
 
 .toggle-link.collapsed:hover {
-  fill: #ccc;
+  fill: #5cb85c;
+}
+
+.edgePath path {
+  stroke: #CCC;
+  stroke-width: 1.5;
+}
+
+.edgePath defs marker {
+  fill: #CCC;
 }
 /*# sourceMappingURL=dagre-flow.css.map */
