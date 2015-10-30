@@ -52,13 +52,16 @@ var DagreFlow =
 	
 	    var GraphModel = __webpack_require__(1);
 	    var Icons = __webpack_require__(2);
+	    var Zoom = __webpack_require__(3);
 	
 	    var svg;
+	    var svgGroup;
 	    var graph;
 	    var renderer;
 	
 	    var init = function init(_svg, _graph) {
 	        svg = _svg;
+	        svgGroup = _svg.select('g');
 	        graph = _graph;
 	        renderer = new dagreD3.render();
 	
@@ -66,8 +69,9 @@ var DagreFlow =
 	    };
 	
 	    var render = function render() {
-	        renderer(svg, graph);
+	        renderer(svgGroup, graph);
 	        addLinks();
+	        Zoom.setZoom(svg, svgGroup, graph);
 	    };
 	
 	    var addLinks = function addLinks() {
@@ -802,6 +806,37 @@ var DagreFlow =
 	
 	    module.exports = {
 	        icons: icons
+	    };
+	})();
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	(function () {
+	    "use strict";
+	
+	    var currentScale = 1;
+	
+	    var setZoom = function setZoom(svg, svgGroup, graph) {
+	        var zoom = d3.behavior.zoom().on("zoom", function () {
+	            currentScale = d3.event.scale;
+	            svgGroup.attr("transform", "translate(" + d3.event.translate + ")" + "scale(" + currentScale + ")");
+	        });
+	        svg.call(zoom);
+	
+	        centerGraph(svg, graph, zoom);
+	    };
+	
+	    var centerGraph = function centerGraph(svg, graph, zoom) {
+	        zoom.translate([(svg.attr("width") - graph.graph().width * currentScale) / 2, 20]).scale(currentScale).event(svg);
+	        svg.attr('height', graph.graph().height * currentScale + 40);
+	    };
+	
+	    module.exports = {
+	        setZoom: setZoom
 	    };
 	})();
 

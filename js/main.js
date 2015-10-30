@@ -3,13 +3,16 @@
 
     var GraphModel = require('./graph.model');
     var Icons = require('./icons');
+    var Zoom = require('./zoom');
 
     var svg;
+    var svgGroup;
     var graph;
     var renderer;
 
     var init = function (_svg, _graph) {
         svg = _svg;
+        svgGroup = _svg.select('g');
         graph = _graph;
         renderer = new dagreD3.render();
 
@@ -17,8 +20,9 @@
     };
 
     var render = function () {
-        renderer(svg, graph);
+        renderer(svgGroup, graph);
         addLinks();
+        Zoom.setZoom(svg, svgGroup, graph);
     };
 
     var addLinks = function () {

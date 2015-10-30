@@ -54,16 +54,11 @@
         g.setEdge('b', 'g');
 
         // Set up an SVG group so that we can translate the final graph.
-        var svg = d3.select("svg"),
-                svgGroup = svg.append("g");
+        var svg = d3.select("svg");
+        var svgGroup = svg.append("g");
 
-        DagreFlow.init(svgGroup, g);
+        DagreFlow.init(svg, g);
         DagreFlow.render();
-
-        // Center the graph
-        var xCenterOffset = (svg.attr("width") - g.graph().width) / 2;
-        svgGroup.attr("transform", "translate(" + xCenterOffset + ", 20)");
-        svg.attr("height", g.graph().height + 40);
     </script>
 
 </body>
