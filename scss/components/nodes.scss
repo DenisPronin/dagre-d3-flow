@@ -10,7 +10,7 @@
 
 text {
   font-weight: 300;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serf, serif;
   font-size: 14px;
 }
 
@@ -40,5 +40,24 @@ text {
   }
 }
 
+.toggle-link {
+  cursor: pointer;
+  stroke: #4cae4c;
 
+  &.expanded {
+    fill: #ccc;
+
+    &:hover {
+      fill: #5cb85c;
+    }
+  }
+
+  &.collapsed {
+    fill: #fff;
+
+    &:hover {
+      fill: #ccc;
+    }
+  }
+}
 

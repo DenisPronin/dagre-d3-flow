@@ -18,29 +18,7 @@
 
     var render = function () {
         renderer(svg, graph);
-        setClusterLabels();
         addLinks();
-    };
-
-    var setClusterLabels = function () {
-        let nodes = GraphModel.getNodes();
-        let icons = Icons.icons;
-        svg.selectAll('.cluster').each(function(clusterId) {
-            let $cluster = d3.select(this);
-            let $rect = $cluster.select('rect');
-            let $label = $cluster.select('.label g');
-            let $togglePlusLink = $label.insert('path', ':first-child');
-            $togglePlusLink.attr('d', function(d) {
-                return (nodes[clusterId].cluster.isExpanded) ? icons['minus'] : icons['plus'];
-            });
-
-            var width = $rect.attr('width');
-            var height = $rect.attr('height');
-
-            $label.attr('transform',
-                'translate(' + (-width / 2) + ',' + (-height / 2) + ')');
-
-        });
     };
 
     var addLinks = function () {
@@ -56,25 +34,33 @@
             return false;
         }
 
+        let icons = Icons.icons;
         let $rect = $elem.select('rect');
-        let x = $rect.attr('x');
-        let y = $rect.attr('y');
+        let $label = $elem.select('.label g');
 
-        let text = 'Expand';
+        let $togglePlusLink = $label.insert('path', ':first-child');
+        $togglePlusLink
+            .attr('d', function(d) {
+                return (clusterObj.cluster.isExpanded) ? icons['minus'] : icons['plus'];
+            })
+            .attr('transform', 'translate(0, -4) scale(0.8)')
+            .attr('class', function(d) {
+                return (clusterObj.cluster.isExpanded) ? 'toggle-link expanded' : 'toggle-link collapsed';
+            });
+
+        let width = $rect.attr('width');
+        let height = $rect.attr('height');
         if(clusterObj.cluster.isExpanded) {
-            $elem.classed('expanded', true);
-            text = 'Collapse';
+            $label.attr('transform', 'translate(' + (-width / 2) + ',' + (-height / 2) + ')');
         }
-        let $toggleGroup = $elem.append('g');
-        $toggleGroup.classed('toggle-link', true);
-        let $textLabel = $toggleGroup.append('text');
-        $textLabel
-            .text(text)
-            .attr('x', x)
-            .attr('y', y);
+        else {
+            $label.attr('transform', 'translate(' + (-width / 2) + ',' + (-height / 4) + ')');
+            $rect.attr('width', parseFloat(width) + 10);
+        }
+        $label.select('text').attr('transform', 'translate(25, 0)');
 
-        $textLabel.on('click', function (clusterId) {
-            if($elem.classed('expanded')) {
+        $togglePlusLink.on('click', function (clusterId) {
+            if(clusterObj.cluster.isExpanded) {
                 collapseCluster(clusterId);
             }
             else {
@@ -144,6 +130,7 @@
             for(let _id of contentsClusters) {
                 graph.setNode(_id, nodes[_id].properties);
                 graph.setParent(_id, clusterId);
+                GraphModel.expandCluster(_id);
                 for (let contentId in nodes[_id].cluster.contents) {
                     graph.setParent(contentId, _id);
                 }
