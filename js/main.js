@@ -22,7 +22,24 @@
     var render = function () {
         renderer(svgGroup, graph);
         addLinks();
+        renderStatus();
         Zoom.setZoom(svg, svgGroup, graph);
+    };
+
+    var renderStatus = function () {
+        let nodes = GraphModel.getNodes();
+        for(let nodeId of Object.keys(nodes)) {
+            let node = nodes[nodeId];
+            if(node.properties.status) {
+                setNodeStatus(nodeId, node.properties.status);
+            }
+        }
+    };
+
+    var setNodeStatus = function (nodeId, status) {
+        GraphModel.setNodeStatus(nodeId, status);
+        let $nodeElem = findNodeElem(nodeId);
+        $nodeElem.classed(status, true);
     };
 
     var addLinks = function () {
@@ -33,7 +50,7 @@
     };
 
     var addToggleLink = function (clusterObj) {
-        let $elem = findClusterElem(clusterObj.id);
+        let $elem = findNodeElem(clusterObj.id);
         if($elem[0].length === 0) {
             return false;
         }
@@ -73,9 +90,9 @@
         });
     };
 
-    var findClusterElem = function (clusterId) {
+    var findNodeElem = function (nodeId) {
         let elems = svg.selectAll('.cluster,.node');
-        return elems.filter(id => id === clusterId);
+        return elems.filter(id => id === nodeId);
     };
 
     var collapseCluster = function (clusterId) {
@@ -168,7 +185,8 @@
 
     module.exports = {
         init: init,
-        render: render
+        render: render,
+        setNodeStatus: setNodeStatus
     };
 
 })();

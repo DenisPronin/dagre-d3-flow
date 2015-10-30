@@ -18,27 +18,58 @@ text {
 
 .node {
   rect {
-    fill: #5cb85c;
-    stroke: #4cae4c;
     rx: 3px;
     ry: 3px;
+    fill: #DDD;
+    stroke: #CCC;
   }
 
   text {
-    fill: #FFF;
+    fill: #000;
   }
 
-}
+  &.SUCCESS {
+    rect {
+      fill: #5cb85c;
+      stroke: #4cae4c;
+    }
 
-
-.edgePath {
-  path {
-    stroke: #CCC;
-    stroke-width: 1.5;
+    text {
+      fill: #FFF;
+    }
   }
 
-  defs marker {
-    fill: #CCC;
+  &.FAILED {
+    rect {
+      fill: #d2322d;
+      stroke: #d2322d;
+    }
+
+    text {
+      fill: #FFF;
+    }
+  }
+
+  &.PENDING {
+    rect {
+      fill: #DDD;
+      stroke: #CCC;
+    }
+
+    text {
+      fill: #000;
+    }
+  }
+
+  &.RUNNING {
+    rect {
+      fill: #39b3d7;
+      stroke: #39b3d7;
+    }
+
+    text {
+      fill: #FFF;
+    }
   }
 }
 
@@ -58,8 +89,18 @@ text {
     fill: #fff;
 
     &:hover {
-      fill: #ccc;
+      fill: #5cb85c;
     }
   }
 }
 
+.edgePath {
+  path {
+    stroke: #CCC;
+    stroke-width: 1.5;
+  }
+
+  defs marker {
+    fill: #CCC;
+  }
+}

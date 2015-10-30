@@ -25,10 +25,10 @@
                 .setDefaultEdgeLabel(function() { return {}; });
 
         // Here we're setting the nodes
-        g.setNode('a', {label: 'A'});
-        g.setNode('b', {label: 'B'});
-        g.setNode('c', {label: 'C'});
-        g.setNode('d', {label: 'D'});
+        g.setNode('a', {label: 'A', status: 'SUCCESS'});
+        g.setNode('b', {label: 'B', status: 'FAILED'});
+        g.setNode('c', {label: 'C', status: 'PENDING'});
+        g.setNode('d', {label: 'D', status: 'RUNNING'});
         g.setNode('e', {label: 'E'});
         g.setNode('f', {label: 'F'});
         g.setNode('g', {label: 'G'});
@@ -59,6 +59,7 @@
 
         DagreFlow.init(svg, g);
         DagreFlow.render();
+        DagreFlow.setNodeStatus('g', 'SUCCESS');
     </script>
 
 </body>

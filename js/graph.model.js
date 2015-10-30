@@ -177,12 +177,17 @@
         }
     };
 
+    var setNodeStatus = function (nodeId, status) {
+        flow.nodes[nodeId].properties.status = status;
+    };
+
     module.exports = {
         create: create,
         getFlow: getFlow,
         getNodes: getNodes,
         getClusters: getClusters,
         expandCluster: expandCluster,
-        collapseCluster: collapseCluster
+        collapseCluster: collapseCluster,
+        setNodeStatus: setNodeStatus
     };
 })();
