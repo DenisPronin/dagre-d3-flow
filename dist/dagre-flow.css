@@ -23,6 +23,11 @@ text {
   stroke: #CCC;
 }
 
+.node:hover rect {
+  fill-opacity: 0.7;
+  cursor: pointer;
+}
+
 .node text {
   fill: #000;
 }
