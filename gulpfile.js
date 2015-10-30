@@ -27,7 +27,7 @@ var paths = {
     js: {
         main: 'js/main.js',
         src: ['js/**/*.js'],
-        tpl: ['js/**/*.tpl.html'],
+        res: ['dist/dagre-flow.js'],
         distPath: 'dist'
     },
     scss: {
@@ -103,6 +103,15 @@ gulp.task('js', function() {
         .pipe(connect.reload());
 });
 
+gulp.task('js_min', ['js'], function () {
+    return gulp.src(paths.js.res)
+        .pipe(rename({suffix: '.min'}))
+        .pipe(uglify())
+        .pipe(gulp.dest(paths.js.distPath))
+        .pipe(connect.reload());
+
+});
+
 gulp.task('sass-lint', function() {
     gulp.src(paths.scss.src)
         .pipe(scsslint({
@@ -137,5 +146,7 @@ gulp.task('watch', function() {
 });
 
 gulp.task('default', ['sass', 'sass-lint', 'js-hint', 'jsVendors', 'js', 'watch', 'open']);
+
+gulp.task('prod', ['sass', 'sass-lint', 'js-hint', 'jsVendors', 'js_min']);
 
 
