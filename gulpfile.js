@@ -36,7 +36,13 @@ var paths = {
         distPath: 'dist'
     },
     vendors: {
-        js: []
+        js: [
+            'bower_components/d3/d3.min.js',
+            'bower_components/lodash/lodash.min.js',
+            'bower_components/graphlib/dist/graphlib.core.min.js',
+            'bower_components/dagre/dist/dagre.core.min.js',
+            'bower_components/dagre-d3/dist/dagre-d3.core.min.js'
+        ]
     }
 };
 
@@ -66,6 +72,12 @@ gulp.task('js-hint', function() {
     return gulp.src(paths.js.src)
         .pipe(jshint())
         .pipe(jshint.reporter('jshint-stylish'))
+});
+
+gulp.task('jsVendors', function() {
+    gulp.src(paths.vendors.js)
+        .pipe(concat('dagre-flow-vendors.js'))
+        .pipe(gulp.dest(paths.js.distPath));
 });
 
 gulp.task('js', function() {
@@ -124,6 +136,6 @@ gulp.task('watch', function() {
     gulp.watch(paths.js.src, ['js-hint', 'js']);
 });
 
-gulp.task('default', ['sass', 'sass-lint', 'js-hint', 'js', 'watch', 'open']);
+gulp.task('default', ['sass', 'sass-lint', 'js-hint', 'jsVendors', 'js', 'watch', 'open']);
 
 
