@@ -875,7 +875,7 @@ var DagreFlow =
 	    };
 	
 	    var centerGraph = function centerGraph(svg, graph, zoom) {
-	        zoom.translate([(svg.attr("width") - graph.graph().width * currentScale) / 2, 20]).scale(currentScale).event(svg);
+	        zoom.translate([(parseInt(svg.attr("width")) - graph.graph().width * currentScale) / 2, 20]).scale(currentScale).event(svg);
 	        svg.attr('height', graph.graph().height * currentScale + 40);
 	    };
 	
