@@ -1,113 +1,114 @@
 .svg-dag {
-  border: 1px solid #ccc;
-}
 
-.clusters rect {
-  fill: #FFF;
-  stroke: #4cae4c;
-  stroke-width: 1.25;
-  rx: 3px;
-  ry: 3px;
-}
-
-text {
-  font-weight: 300;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serf, serif;
-  font-size: 14px;
-}
-
-.node {
-  rect {
+  .clusters rect {
+    fill: #FFF;
+    stroke: #4cae4c;
+    stroke-width: 1.25;
     rx: 3px;
     ry: 3px;
-    fill: #DDD;
-    stroke: #CCC;
-  }
-
-  &:hover {
-    rect {
-      fill-opacity: 0.7;
-      cursor: pointer;
-    }
   }
 
   text {
-    fill: #000;
+    font-weight: 300;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serf, serif;
+    font-size: 14px;
   }
 
-  &.SUCCESS {
+  .node {
     rect {
-      fill: #5cb85c;
-      stroke: #4cae4c;
-    }
-
-    text {
-      fill: #FFF;
-    }
-  }
-
-  &.FAILED {
-    rect {
-      fill: #d2322d;
-      stroke: #d2322d;
-    }
-
-    text {
-      fill: #FFF;
-    }
-  }
-
-  &.PENDING {
-    rect {
+      rx: 3px;
+      ry: 3px;
       fill: #DDD;
       stroke: #CCC;
+    }
+
+    &:hover {
+      rect {
+        fill-opacity: 0.7;
+        cursor: pointer;
+      }
     }
 
     text {
       fill: #000;
     }
-  }
 
-  &.RUNNING {
-    rect {
-      fill: #39b3d7;
-      stroke: #39b3d7;
+    &.SUCCESS {
+      rect {
+        fill: #5cb85c;
+        stroke: #4cae4c;
+      }
+
+      text {
+        fill: #FFF;
+      }
     }
 
-    text {
-      fill: #FFF;
+    &.FAILED {
+      rect {
+        fill: #d2322d;
+        stroke: #d2322d;
+      }
+
+      text {
+        fill: #FFF;
+      }
+    }
+
+    &.PENDING {
+      rect {
+        fill: #DDD;
+        stroke: #CCC;
+      }
+
+      text {
+        fill: #000;
+      }
+    }
+
+    &.RUNNING {
+      rect {
+        fill: #39b3d7;
+        stroke: #39b3d7;
+      }
+
+      text {
+        fill: #FFF;
+      }
     }
   }
+
+  .toggle-link {
+    cursor: pointer;
+    stroke: #4cae4c;
+
+    &.expanded {
+      fill: #ccc;
+
+      &:hover {
+        fill: #5cb85c;
+      }
+    }
+
+    &.collapsed {
+      fill: #fff;
+
+      &:hover {
+        fill: #5cb85c;
+      }
+    }
+  }
+
+  .edgePath {
+    path {
+      stroke: #CCC;
+      stroke-width: 1.5;
+    }
+
+    defs marker {
+      fill: #CCC;
+    }
+  }
+
 }
 
-.toggle-link {
-  cursor: pointer;
-  stroke: #4cae4c;
-
-  &.expanded {
-    fill: #ccc;
-
-    &:hover {
-      fill: #5cb85c;
-    }
-  }
-
-  &.collapsed {
-    fill: #fff;
-
-    &:hover {
-      fill: #5cb85c;
-    }
-  }
-}
-
-.edgePath {
-  path {
-    stroke: #CCC;
-    stroke-width: 1.5;
-  }
-
-  defs marker {
-    fill: #CCC;
-  }
-}

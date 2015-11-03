@@ -1,8 +1,4 @@
-.svg-dag {
-  border: 1px solid #ccc;
-}
-
-.clusters rect {
+.svg-dag .clusters rect {
   fill: #FFF;
   stroke: #4cae4c;
   stroke-width: 1.25;
@@ -10,91 +6,91 @@
   ry: 3px;
 }
 
-text {
+.svg-dag text {
   font-weight: 300;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serf, serif;
   font-size: 14px;
 }
 
-.node rect {
+.svg-dag .node rect {
   rx: 3px;
   ry: 3px;
   fill: #DDD;
   stroke: #CCC;
 }
 
-.node:hover rect {
+.svg-dag .node:hover rect {
   fill-opacity: 0.7;
   cursor: pointer;
 }
 
-.node text {
+.svg-dag .node text {
   fill: #000;
 }
 
-.node.SUCCESS rect {
+.svg-dag .node.SUCCESS rect {
   fill: #5cb85c;
   stroke: #4cae4c;
 }
 
-.node.SUCCESS text {
+.svg-dag .node.SUCCESS text {
   fill: #FFF;
 }
 
-.node.FAILED rect {
+.svg-dag .node.FAILED rect {
   fill: #d2322d;
   stroke: #d2322d;
 }
 
-.node.FAILED text {
+.svg-dag .node.FAILED text {
   fill: #FFF;
 }
 
-.node.PENDING rect {
+.svg-dag .node.PENDING rect {
   fill: #DDD;
   stroke: #CCC;
 }
 
-.node.PENDING text {
+.svg-dag .node.PENDING text {
   fill: #000;
 }
 
-.node.RUNNING rect {
+.svg-dag .node.RUNNING rect {
   fill: #39b3d7;
   stroke: #39b3d7;
 }
 
-.node.RUNNING text {
+.svg-dag .node.RUNNING text {
   fill: #FFF;
 }
 
-.toggle-link {
+.svg-dag .toggle-link {
   cursor: pointer;
   stroke: #4cae4c;
 }
 
-.toggle-link.expanded {
+.svg-dag .toggle-link.expanded {
   fill: #ccc;
 }
 
-.toggle-link.expanded:hover {
+.svg-dag .toggle-link.expanded:hover {
   fill: #5cb85c;
 }
 
-.toggle-link.collapsed {
+.svg-dag .toggle-link.collapsed {
   fill: #fff;
 }
 
-.toggle-link.collapsed:hover {
+.svg-dag .toggle-link.collapsed:hover {
   fill: #5cb85c;
 }
 
-.edgePath path {
+.svg-dag .edgePath path {
   stroke: #CCC;
   stroke-width: 1.5;
 }
 
-.edgePath defs marker {
+.svg-dag .edgePath defs marker {
   fill: #CCC;
 }
 /*# sourceMappingURL=dagre-flow.css.map */
