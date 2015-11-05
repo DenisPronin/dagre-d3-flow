@@ -108,7 +108,7 @@
             .attr('d', function(d) {
                 return (clusterObj.cluster.isExpanded) ? icons.minus : icons.plus;
             })
-            .attr('transform', 'translate(0, -4) scale(0.8)')
+            .attr('transform', 'translate(0, -4) scale(0.8)');
 
         $label.on('click', function (clusterId) {
             if(clusterObj.cluster.isExpanded) {
