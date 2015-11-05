@@ -69,7 +69,7 @@ var DagreFlow =
 	    };
 	
 	    var render = function render() {
-	        var durationVal = 500;
+	        var durationVal = 400;
 	        graph.graph().transition = function (selection) {
 	            return selection.transition().duration(durationVal);
 	        };

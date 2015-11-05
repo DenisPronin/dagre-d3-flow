@@ -20,7 +20,7 @@
     };
 
     var render = function () {
-        var durationVal = 500;
+        var durationVal = 400;
         graph.graph().transition = function(selection) {
             return selection.transition().duration(durationVal);
         };
