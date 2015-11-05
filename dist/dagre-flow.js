@@ -69,8 +69,16 @@ var DagreFlow =
 	    };
 	
 	    var render = function render() {
+	        var durationVal = 500;
+	        graph.graph().transition = function (selection) {
+	            return selection.transition().duration(durationVal);
+	        };
 	        renderer(svgGroup, graph);
-	        addLinks();
+	
+	        setTimeout(function () {
+	            addLinks();
+	        }, durationVal + 100);
+	
 	        renderStatus();
 	        Zoom.setZoom(svg, svgGroup, graph);
 	    };
@@ -129,22 +137,37 @@ var DagreFlow =
 	        var $rect = $elem.select('rect');
 	        var $label = $elem.select('.label g');
 	
-	        var $togglePlusLink = $label.insert('path', ':first-child');
-	        $togglePlusLink.attr('d', function (d) {
-	            return clusterObj.cluster.isExpanded ? icons.minus : icons.plus;
-	        }).attr('transform', 'translate(0, -4) scale(0.8)').attr('class', function (d) {
-	            return clusterObj.cluster.isExpanded ? 'toggle-link expanded' : 'toggle-link collapsed';
-	        });
+	        if (!$rect[0][0] || !$elem[0][0]) {
+	            return false;
+	        }
 	
 	        var width = $rect.attr('width');
 	        var height = $rect.attr('height');
+	
+	        if (!width || !height) {
+	            return false;
+	        }
+	
 	        if (clusterObj.cluster.isExpanded) {
 	            $label.attr('transform', 'translate(' + -width / 2 + ',' + -height / 2 + ')');
 	        } else {
 	            $label.attr('transform', 'translate(' + -width / 2 + ',' + -height / 4 + ')');
 	            $rect.attr('width', parseFloat(width) + 10);
 	        }
-	        $label.select('text').attr('transform', 'translate(25, 0)');
+	
+	        if (clusterObj.cluster.isExpanded) {
+	            $label.selectAll('*').remove();
+	            $label.append('text').append('tspan').attr("xml:space", "preserve").attr("dy", "1em").attr("x", "1").text(clusterObj.properties.flowLabel);
+	        }
+	
+	        $label.select('text').transition().attr('transform', 'translate(25, 0)').duration(300);
+	
+	        var $togglePlusLink = $label.insert('path', ':first-child');
+	        $togglePlusLink.attr('d', function (d) {
+	            return clusterObj.cluster.isExpanded ? icons.minus : icons.plus;
+	        }).attr('transform', 'translate(0, -4) scale(0.8)').attr('class', function (d) {
+	            return clusterObj.cluster.isExpanded ? 'toggle-link expanded' : 'toggle-link collapsed';
+	        });
 	
 	        $togglePlusLink.on('click', function (clusterId) {
 	            if (clusterObj.cluster.isExpanded) {
@@ -208,6 +231,8 @@ var DagreFlow =
 	                }
 	                graph.setEdge(clusterId, link);
 	            });
+	            // set label for node for right calc size of nodes in dagre-d3
+	            graph._nodes[clusterId].label = graph._nodes[clusterId].flowLabel;
 	        }
 	        render();
 	    };
@@ -354,6 +379,8 @@ var DagreFlow =
 	                    }
 	                    graph.setEdge(edge.v, link);
 	                });
+	
+	                graph._nodes[clusterId].label = '';
 	            })();
 	        }
 	        render();
@@ -408,7 +435,7 @@ var DagreFlow =
 	                flow.nodes[_nodeId] = {};
 	                var flowNode = flow.nodes[_nodeId];
 	                flowNode.id = _nodeId;
-	                flowNode.properties = graph._nodes[_nodeId];
+	                flowNode.properties = setProperties(graph, _nodeId);
 	
 	                flowNode.children = getChildren(graph, _nodeId);
 	                flowNode.parents = getParent(graph, _nodeId);
@@ -436,6 +463,16 @@ var DagreFlow =
 	        setClustersLinks();
 	        setClustersParents(graph);
 	        graph._flow = flow;
+	    };
+	
+	    var setProperties = function setProperties(graph, _nodeId) {
+	        var node = graph._nodes[_nodeId];
+	        if (isCluster(graph, _nodeId)) {
+	            var label = node.label;
+	            node.label = '';
+	            node.flowLabel = label;
+	        }
+	        return node;
 	    };
 	
 	    var getChildren = function getChildren(graph, _nodeId) {
