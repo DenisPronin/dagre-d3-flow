@@ -69,6 +69,7 @@ var DagreFlow =
 	    };
 	
 	    var render = function render() {
+	        setEdgesInterpolation();
 	        var durationVal = 400;
 	        graph.graph().transition = function (selection) {
 	            return selection.transition().duration(durationVal);
@@ -118,6 +119,34 @@ var DagreFlow =
 	        GraphModel.setNodeStatus(nodeId, status);
 	        var $nodeElem = findNodeElem(nodeId);
 	        $nodeElem.classed(status, true);
+	    };
+	
+	    var setEdgesInterpolation = function setEdgesInterpolation() {
+	        var _iteratorNormalCompletion2 = true;
+	        var _didIteratorError2 = false;
+	        var _iteratorError2 = undefined;
+	
+	        try {
+	            for (var _iterator2 = Object.keys(graph._edgeLabels)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	                var key = _step2.value;
+	
+	                var edgeLabel = graph._edgeLabels[key];
+	                edgeLabel.lineInterpolate = 'bundle';
+	            }
+	        } catch (err) {
+	            _didIteratorError2 = true;
+	            _iteratorError2 = err;
+	        } finally {
+	            try {
+	                if (!_iteratorNormalCompletion2 && _iterator2['return']) {
+	                    _iterator2['return']();
+	                }
+	            } finally {
+	                if (_didIteratorError2) {
+	                    throw _iteratorError2;
+	                }
+	            }
+	        }
 	    };
 	
 	    var addLinks = function addLinks() {
@@ -190,27 +219,27 @@ var DagreFlow =
 	        if (node.isCluster) {
 	            var contents = node.cluster.contents;
 	            var edges = node.cluster.edges;
-	            var _iteratorNormalCompletion2 = true;
-	            var _didIteratorError2 = false;
-	            var _iteratorError2 = undefined;
+	            var _iteratorNormalCompletion3 = true;
+	            var _didIteratorError3 = false;
+	            var _iteratorError3 = undefined;
 	
 	            try {
-	                for (var _iterator2 = Object.keys(contents)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-	                    var _id = _step2.value;
+	                for (var _iterator3 = Object.keys(contents)[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+	                    var _id = _step3.value;
 	
 	                    graph.removeNode(_id);
 	                }
 	            } catch (err) {
-	                _didIteratorError2 = true;
-	                _iteratorError2 = err;
+	                _didIteratorError3 = true;
+	                _iteratorError3 = err;
 	            } finally {
 	                try {
-	                    if (!_iteratorNormalCompletion2 && _iterator2['return']) {
-	                        _iterator2['return']();
+	                    if (!_iteratorNormalCompletion3 && _iterator3['return']) {
+	                        _iterator3['return']();
 	                    }
 	                } finally {
-	                    if (_didIteratorError2) {
-	                        throw _iteratorError2;
+	                    if (_didIteratorError3) {
+	                        throw _iteratorError3;
 	                    }
 	                }
 	            }
@@ -240,14 +269,6 @@ var DagreFlow =
 	        var nodes = GraphModel.getNodes();
 	        var node = nodes[clusterId];
 	        if (node.isCluster) {
-	            var _iteratorNormalCompletion3;
-	
-	            var _didIteratorError3;
-	
-	            var _iteratorError3;
-	
-	            var _iterator3, _step3;
-	
 	            var _iteratorNormalCompletion4;
 	
 	            var _didIteratorError4;
@@ -264,6 +285,14 @@ var DagreFlow =
 	
 	            var _iterator5, _step5;
 	
+	            var _iteratorNormalCompletion6;
+	
+	            var _didIteratorError6;
+	
+	            var _iteratorError6;
+	
+	            var _iterator6, _step6;
+	
 	            (function () {
 	                graph.removeNode(clusterId);
 	                graph.setNode(clusterId, node.properties);
@@ -279,46 +308,16 @@ var DagreFlow =
 	                    }
 	                });
 	
-	                _iteratorNormalCompletion3 = true;
-	                _didIteratorError3 = false;
-	                _iteratorError3 = undefined;
-	
-	                try {
-	                    for (_iterator3 = contentsNodes[Symbol.iterator](); !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-	                        var _id = _step3.value;
-	
-	                        graph.setNode(_id, nodes[_id].properties);
-	                        graph.setParent(_id, clusterId);
-	                    }
-	                } catch (err) {
-	                    _didIteratorError3 = true;
-	                    _iteratorError3 = err;
-	                } finally {
-	                    try {
-	                        if (!_iteratorNormalCompletion3 && _iterator3['return']) {
-	                            _iterator3['return']();
-	                        }
-	                    } finally {
-	                        if (_didIteratorError3) {
-	                            throw _iteratorError3;
-	                        }
-	                    }
-	                }
-	
 	                _iteratorNormalCompletion4 = true;
 	                _didIteratorError4 = false;
 	                _iteratorError4 = undefined;
 	
 	                try {
-	                    for (_iterator4 = contentsClusters[Symbol.iterator](); !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+	                    for (_iterator4 = contentsNodes[Symbol.iterator](); !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
 	                        var _id = _step4.value;
 	
 	                        graph.setNode(_id, nodes[_id].properties);
 	                        graph.setParent(_id, clusterId);
-	                        GraphModel.expandCluster(_id);
-	                        for (var contentId in nodes[_id].cluster.contents) {
-	                            graph.setParent(contentId, _id);
-	                        }
 	                    }
 	                } catch (err) {
 	                    _didIteratorError4 = true;
@@ -340,10 +339,15 @@ var DagreFlow =
 	                _iteratorError5 = undefined;
 	
 	                try {
-	                    for (_iterator5 = Object.keys(node.parents)[Symbol.iterator](); !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-	                        var parentId = _step5.value;
+	                    for (_iterator5 = contentsClusters[Symbol.iterator](); !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+	                        var _id = _step5.value;
 	
-	                        graph.setParent(clusterId, parentId);
+	                        graph.setNode(_id, nodes[_id].properties);
+	                        graph.setParent(_id, clusterId);
+	                        GraphModel.expandCluster(_id);
+	                        for (var contentId in nodes[_id].cluster.contents) {
+	                            graph.setParent(contentId, _id);
+	                        }
 	                    }
 	                } catch (err) {
 	                    _didIteratorError5 = true;
@@ -356,6 +360,31 @@ var DagreFlow =
 	                    } finally {
 	                        if (_didIteratorError5) {
 	                            throw _iteratorError5;
+	                        }
+	                    }
+	                }
+	
+	                _iteratorNormalCompletion6 = true;
+	                _didIteratorError6 = false;
+	                _iteratorError6 = undefined;
+	
+	                try {
+	                    for (_iterator6 = Object.keys(node.parents)[Symbol.iterator](); !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+	                        var parentId = _step6.value;
+	
+	                        graph.setParent(clusterId, parentId);
+	                    }
+	                } catch (err) {
+	                    _didIteratorError6 = true;
+	                    _iteratorError6 = err;
+	                } finally {
+	                    try {
+	                        if (!_iteratorNormalCompletion6 && _iterator6['return']) {
+	                            _iterator6['return']();
+	                        }
+	                    } finally {
+	                        if (_didIteratorError6) {
+	                            throw _iteratorError6;
 	                        }
 	                    }
 	                }

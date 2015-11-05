@@ -20,6 +20,7 @@
     };
 
     var render = function () {
+        setEdgesInterpolation();
         var durationVal = 400;
         graph.graph().transition = function(selection) {
             return selection.transition().duration(durationVal);
@@ -48,6 +49,13 @@
         GraphModel.setNodeStatus(nodeId, status);
         let $nodeElem = findNodeElem(nodeId);
         $nodeElem.classed(status, true);
+    };
+
+    var setEdgesInterpolation = function () {
+        for(let key of Object.keys(graph._edgeLabels)) {
+            let edgeLabel = graph._edgeLabels[key];
+            edgeLabel.lineInterpolate = 'bundle';
+        }
     };
 
     var addLinks = function () {
