@@ -79,10 +79,10 @@
         }
 
         if(clusterObj.cluster.isExpanded) {
-            $label.attr('transform', 'translate(' + (-width / 2) + ',' + (-height / 2) + ')');
+            $label.attr('transform', 'translate(' + (-width / 2) + ',' + (-height / 2) + ')').classed('toggle-link expanded', true);
         }
         else {
-            $label.attr('transform', 'translate(' + (-width / 2) + ',' + (-height / 4) + ')');
+            $label.attr('transform', 'translate(' + (-width / 2) + ',' + (-height / 4) + ')').classed('toggle-link collapsed', true);
             $rect.attr('width', parseFloat(width) + 10);
         }
 
@@ -101,11 +101,8 @@
                 return (clusterObj.cluster.isExpanded) ? icons.minus : icons.plus;
             })
             .attr('transform', 'translate(0, -4) scale(0.8)')
-            .attr('class', function(d) {
-                return (clusterObj.cluster.isExpanded) ? 'toggle-link expanded' : 'toggle-link collapsed';
-            });
 
-        $togglePlusLink.on('click', function (clusterId) {
+        $label.on('click', function (clusterId) {
             if(clusterObj.cluster.isExpanded) {
                 collapseCluster(clusterId);
             }

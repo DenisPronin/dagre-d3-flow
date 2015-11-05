@@ -10,6 +10,8 @@
   font-weight: 300;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serf, serif;
   font-size: 14px;
+  stroke: none;
+  fill: #000;
 }
 
 .svg-dag .node rect {
