@@ -27,7 +27,7 @@
             flow.nodes[_nodeId] = {};
             let flowNode = flow.nodes[_nodeId];
             flowNode.id = _nodeId;
-            flowNode.properties = graph._nodes[_nodeId];
+            flowNode.properties = setProperties(graph, _nodeId);
 
             flowNode.children = getChildren(graph, _nodeId);
             flowNode.parents = getParent(graph, _nodeId);
@@ -41,6 +41,16 @@
         setClustersLinks();
         setClustersParents(graph);
         graph._flow = flow;
+    };
+
+    var setProperties = function (graph, _nodeId) {
+        let node = graph._nodes[_nodeId];
+        if(isCluster(graph, _nodeId)) {
+            let label = node.label;
+            node.label = '';
+            node.flowLabel = label;
+        }
+        return node;
     };
 
     var getChildren = function (graph, _nodeId) {

@@ -20,8 +20,16 @@
     };
 
     var render = function () {
+        var durationVal = 500;
+        graph.graph().transition = function(selection) {
+            return selection.transition().duration(durationVal);
+        };
         renderer(svgGroup, graph);
-        addLinks();
+
+        setTimeout(function () {
+            addLinks();
+        }, durationVal + 100);
+
         renderStatus();
         Zoom.setZoom(svg, svgGroup, graph);
     };
@@ -59,6 +67,34 @@
         let $rect = $elem.select('rect');
         let $label = $elem.select('.label g');
 
+        if(!$rect[0][0] || !$elem[0][0]) {
+            return false;
+        }
+
+        let width = $rect.attr('width');
+        let height = $rect.attr('height');
+
+        if(!width || !height) {
+            return false;
+        }
+
+        if(clusterObj.cluster.isExpanded) {
+            $label.attr('transform', 'translate(' + (-width / 2) + ',' + (-height / 2) + ')');
+        }
+        else {
+            $label.attr('transform', 'translate(' + (-width / 2) + ',' + (-height / 4) + ')');
+            $rect.attr('width', parseFloat(width) + 10);
+        }
+
+        if(clusterObj.cluster.isExpanded) {
+            $label.selectAll('*').remove();
+            $label
+                .append('text')
+                .append('tspan').attr("xml:space", "preserve").attr("dy", "1em").attr("x", "1").text(clusterObj.properties.flowLabel);
+        }
+
+        $label.select('text').transition().attr('transform', 'translate(25, 0)').duration(300);
+
         let $togglePlusLink = $label.insert('path', ':first-child');
         $togglePlusLink
             .attr('d', function(d) {
@@ -68,17 +104,6 @@
             .attr('class', function(d) {
                 return (clusterObj.cluster.isExpanded) ? 'toggle-link expanded' : 'toggle-link collapsed';
             });
-
-        let width = $rect.attr('width');
-        let height = $rect.attr('height');
-        if(clusterObj.cluster.isExpanded) {
-            $label.attr('transform', 'translate(' + (-width / 2) + ',' + (-height / 2) + ')');
-        }
-        else {
-            $label.attr('transform', 'translate(' + (-width / 2) + ',' + (-height / 4) + ')');
-            $rect.attr('width', parseFloat(width) + 10);
-        }
-        $label.select('text').attr('transform', 'translate(25, 0)');
 
         $togglePlusLink.on('click', function (clusterId) {
             if(clusterObj.cluster.isExpanded) {
@@ -120,6 +145,8 @@
                 }
                 graph.setEdge(clusterId, link);
             });
+            // set label for node for right calc size of nodes in dagre-d3
+            graph._nodes[clusterId].label = graph._nodes[clusterId].flowLabel;
         }
         render();
     };
@@ -178,6 +205,7 @@
                 graph.setEdge(edge.v, link);
             });
 
+            graph._nodes[clusterId].label = '';
         }
         render();
 
