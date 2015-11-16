@@ -57,7 +57,7 @@
             .each(function (v) {
                 let description = graph.node(v).description;
                 if(description) {
-                    $(this).tipsy({gravity: "n", opacity: 1, html: true});
+                    jQuery(this).tipsy({gravity: "n", opacity: 1, html: true});
                 }
             });
 
