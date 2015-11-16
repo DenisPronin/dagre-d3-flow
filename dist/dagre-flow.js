@@ -50,20 +50,23 @@ var DagreFlow =
 	(function () {
 	    'use strict';
 	
-	    var GraphModel = __webpack_require__(1);
-	    var Icons = __webpack_require__(2);
-	    var Zoom = __webpack_require__(3);
+	    var Options = __webpack_require__(1);
+	    var GraphModel = __webpack_require__(2);
+	    var Icons = __webpack_require__(3);
+	    var Zoom = __webpack_require__(4);
 	
 	    var svg;
 	    var svgGroup;
 	    var graph;
 	    var renderer;
 	
-	    var init = function init(_svg, _graph) {
+	    var init = function init(_svg, _graph, _options) {
 	        svg = _svg;
 	        svgGroup = _svg.select('g');
 	        graph = _graph;
 	        renderer = new dagreD3.render();
+	
+	        Options.init(_options);
 	
 	        GraphModel.create(graph);
 	    };
@@ -78,10 +81,32 @@ var DagreFlow =
 	
 	        setTimeout(function () {
 	            addLinks();
+	            renderTooltips();
 	        }, durationVal + 100);
 	
 	        renderStatus();
 	        Zoom.setZoom(svg, svgGroup, graph);
+	    };
+	
+	    var renderTooltips = function renderTooltips() {
+	        var shortLabels = Options.get('shortLabels');
+	        if (!shortLabels) {
+	            return false;
+	        }
+	
+	        var styleTooltip = function styleTooltip(name, description) {
+	            return "<div class='description'>" + description + "</div>";
+	        };
+	
+	        svg.selectAll("g.node").attr("title", function (v) {
+	            var description = graph.node(v).description;
+	            return description ? styleTooltip(v, description) : '';
+	        }).each(function (v) {
+	            var description = graph.node(v).description;
+	            if (description) {
+	                $(this).tipsy({ gravity: "n", opacity: 1, html: true });
+	            }
+	        });
 	    };
 	
 	    var renderStatus = function renderStatus() {
@@ -429,6 +454,36 @@ var DagreFlow =
 	(function () {
 	    "use strict";
 	
+	    var options = {
+	        shortLabels: false,
+	        shortLabelLength: 4
+	    };
+	
+	    var init = function init(_options) {
+	        options = _.extend(options, _options);
+	    };
+	
+	    var get = function get(name) {
+	        return options[name];
+	    };
+	
+	    module.exports = {
+	        init: init,
+	        get: get
+	    };
+	})();
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	(function () {
+	    "use strict";
+	
+	    var Options = __webpack_require__(1);
+	
 	    var flow = {};
 	
 	    var getFlow = function getFlow() {
@@ -477,8 +532,8 @@ var DagreFlow =
 	            _iteratorError = err;
 	        } finally {
 	            try {
-	                if (!_iteratorNormalCompletion && _iterator["return"]) {
-	                    _iterator["return"]();
+	                if (!_iteratorNormalCompletion && _iterator['return']) {
+	                    _iterator['return']();
 	                }
 	            } finally {
 	                if (_didIteratorError) {
@@ -498,6 +553,15 @@ var DagreFlow =
 	            var label = node.label;
 	            node.label = '';
 	            node.flowLabel = label;
+	        } else {
+	            var shortLabels = Options.get('shortLabels');
+	            if (shortLabels) {
+	                var shortLabelLength = Options.get('shortLabelLength');
+	                if (node.label.length > shortLabelLength) {
+	                    node.description = node.label;
+	                    node.label = node.label.substring(0, shortLabelLength) + '...';
+	                }
+	            }
 	        }
 	        return node;
 	    };
@@ -520,8 +584,8 @@ var DagreFlow =
 	            _iteratorError2 = err;
 	        } finally {
 	            try {
-	                if (!_iteratorNormalCompletion2 && _iterator2["return"]) {
-	                    _iterator2["return"]();
+	                if (!_iteratorNormalCompletion2 && _iterator2['return']) {
+	                    _iterator2['return']();
 	                }
 	            } finally {
 	                if (_didIteratorError2) {
@@ -551,8 +615,8 @@ var DagreFlow =
 	            _iteratorError3 = err;
 	        } finally {
 	            try {
-	                if (!_iteratorNormalCompletion3 && _iterator3["return"]) {
-	                    _iterator3["return"]();
+	                if (!_iteratorNormalCompletion3 && _iterator3['return']) {
+	                    _iterator3['return']();
 	                }
 	            } finally {
 	                if (_didIteratorError3) {
@@ -596,8 +660,8 @@ var DagreFlow =
 	            _iteratorError4 = err;
 	        } finally {
 	            try {
-	                if (!_iteratorNormalCompletion4 && _iterator4["return"]) {
-	                    _iterator4["return"]();
+	                if (!_iteratorNormalCompletion4 && _iterator4['return']) {
+	                    _iterator4['return']();
 	                }
 	            } finally {
 	                if (_didIteratorError4) {
@@ -654,8 +718,8 @@ var DagreFlow =
 	                    _iteratorError6 = err;
 	                } finally {
 	                    try {
-	                        if (!_iteratorNormalCompletion6 && _iterator6["return"]) {
-	                            _iterator6["return"]();
+	                        if (!_iteratorNormalCompletion6 && _iterator6['return']) {
+	                            _iterator6['return']();
 	                        }
 	                    } finally {
 	                        if (_didIteratorError6) {
@@ -690,8 +754,8 @@ var DagreFlow =
 	                    _iteratorError7 = err;
 	                } finally {
 	                    try {
-	                        if (!_iteratorNormalCompletion7 && _iterator7["return"]) {
-	                            _iterator7["return"]();
+	                        if (!_iteratorNormalCompletion7 && _iterator7['return']) {
+	                            _iterator7['return']();
 	                        }
 	                    } finally {
 	                        if (_didIteratorError7) {
@@ -705,8 +769,8 @@ var DagreFlow =
 	            _iteratorError5 = err;
 	        } finally {
 	            try {
-	                if (!_iteratorNormalCompletion5 && _iterator5["return"]) {
-	                    _iterator5["return"]();
+	                if (!_iteratorNormalCompletion5 && _iterator5['return']) {
+	                    _iterator5['return']();
 	                }
 	            } finally {
 	                if (_didIteratorError5) {
@@ -747,8 +811,8 @@ var DagreFlow =
 	                    _iteratorError9 = err;
 	                } finally {
 	                    try {
-	                        if (!_iteratorNormalCompletion9 && _iterator9["return"]) {
-	                            _iterator9["return"]();
+	                        if (!_iteratorNormalCompletion9 && _iterator9['return']) {
+	                            _iterator9['return']();
 	                        }
 	                    } finally {
 	                        if (_didIteratorError9) {
@@ -762,8 +826,8 @@ var DagreFlow =
 	            _iteratorError8 = err;
 	        } finally {
 	            try {
-	                if (!_iteratorNormalCompletion8 && _iterator8["return"]) {
-	                    _iterator8["return"]();
+	                if (!_iteratorNormalCompletion8 && _iterator8['return']) {
+	                    _iterator8['return']();
 	                }
 	            } finally {
 	                if (_didIteratorError8) {
@@ -802,8 +866,8 @@ var DagreFlow =
 	                    _iteratorError11 = err;
 	                } finally {
 	                    try {
-	                        if (!_iteratorNormalCompletion11 && _iterator11["return"]) {
-	                            _iterator11["return"]();
+	                        if (!_iteratorNormalCompletion11 && _iterator11['return']) {
+	                            _iterator11['return']();
 	                        }
 	                    } finally {
 	                        if (_didIteratorError11) {
@@ -817,8 +881,8 @@ var DagreFlow =
 	            _iteratorError10 = err;
 	        } finally {
 	            try {
-	                if (!_iteratorNormalCompletion10 && _iterator10["return"]) {
-	                    _iterator10["return"]();
+	                if (!_iteratorNormalCompletion10 && _iterator10['return']) {
+	                    _iterator10['return']();
 	                }
 	            } finally {
 	                if (_didIteratorError10) {
@@ -854,8 +918,8 @@ var DagreFlow =
 	            _iteratorError12 = err;
 	        } finally {
 	            try {
-	                if (!_iteratorNormalCompletion12 && _iterator12["return"]) {
-	                    _iterator12["return"]();
+	                if (!_iteratorNormalCompletion12 && _iterator12['return']) {
+	                    _iterator12['return']();
 	                }
 	            } finally {
 	                if (_didIteratorError12) {
@@ -899,7 +963,7 @@ var DagreFlow =
 	})();
 
 /***/ },
-/* 2 */
+/* 3 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -918,7 +982,7 @@ var DagreFlow =
 	})();
 
 /***/ },
-/* 3 */
+/* 4 */
 /***/ function(module, exports) {
 
 	"use strict";
