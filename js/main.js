@@ -1,6 +1,7 @@
 (function () {
     'use strict';
 
+    var Options = require('./options');
     var GraphModel = require('./graph.model');
     var Icons = require('./icons');
     var Zoom = require('./zoom');
@@ -10,11 +11,13 @@
     var graph;
     var renderer;
 
-    var init = function (_svg, _graph) {
+    var init = function (_svg, _graph, _options) {
         svg = _svg;
         svgGroup = _svg.select('g');
         graph = _graph;
         renderer = new dagreD3.render();
+
+        Options.init(_options);
 
         GraphModel.create(graph);
     };
@@ -29,10 +32,35 @@
 
         setTimeout(function () {
             addLinks();
+            renderTooltips();
         }, durationVal + 100);
 
         renderStatus();
         Zoom.setZoom(svg, svgGroup, graph);
+    };
+
+    var renderTooltips = function () {
+        let shortLabels = Options.get('shortLabels');
+        if(!shortLabels) {
+            return false;
+        }
+
+        let styleTooltip = function(name, description) {
+            return "<div class='description'>" + description + "</div>";
+        };
+
+        svg.selectAll("g.node")
+            .attr("title", function (v) {
+                let description = graph.node(v).description;
+                return (description) ? styleTooltip(v, description) : '';
+            })
+            .each(function (v) {
+                let description = graph.node(v).description;
+                if(description) {
+                    $(this).tipsy({gravity: "n", opacity: 1, html: true});
+                }
+            });
+
     };
 
     var renderStatus = function () {

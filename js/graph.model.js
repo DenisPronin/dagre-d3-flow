@@ -1,6 +1,8 @@
 (function () {
     "use strict";
 
+    var Options = require('./options');
+
     var flow = {};
 
     var getFlow = function () {
@@ -49,6 +51,16 @@
             let label = node.label;
             node.label = '';
             node.flowLabel = label;
+        }
+        else {
+            let shortLabels = Options.get('shortLabels');
+            if(shortLabels) {
+                let shortLabelLength = Options.get('shortLabelLength');
+                if(node.label.length > shortLabelLength) {
+                    node.description = node.label;
+                    node.label = node.label.substring(0, shortLabelLength) + '...';
+                }
+            }
         }
         return node;
     };
