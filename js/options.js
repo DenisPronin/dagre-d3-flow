@@ -3,7 +3,8 @@
 
     var options = {
         shortLabels: false,
-        shortLabelLength: 4
+        shortLabelLength: 4,
+        statuses: ['SUCCESS', 'FAILED', 'PENDING', 'RUNNING']
     };
 
     var init = function (_options) {

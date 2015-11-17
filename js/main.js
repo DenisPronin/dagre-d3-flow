@@ -76,6 +76,10 @@
     var setNodeStatus = function (nodeId, status) {
         GraphModel.setNodeStatus(nodeId, status);
         let $nodeElem = findNodeElem(nodeId);
+        var statuses = Options.get('statuses');
+        for(let statusName of statuses) {
+            $nodeElem.classed(statusName, false);
+        }
         $nodeElem.classed(status, true);
     };
 
