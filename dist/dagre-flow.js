@@ -618,7 +618,7 @@ var DagreFlow =
 	            node.flowLabel = label;
 	        } else {
 	            var shortLabels = Options.get('shortLabels');
-	            if (shortLabels) {
+	            if (shortLabels && node.shortLabel) {
 	                var shortLabelLength = Options.get('shortLabelLength');
 	                if (node.label.length > shortLabelLength) {
 	                    node.description = node.label;

@@ -54,7 +54,7 @@
         }
         else {
             let shortLabels = Options.get('shortLabels');
-            if(shortLabels) {
+            if(shortLabels && node.shortLabel) {
                 let shortLabelLength = Options.get('shortLabelLength');
                 if(node.label.length > shortLabelLength) {
                     node.description = node.label;
