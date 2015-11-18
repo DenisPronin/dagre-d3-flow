@@ -54,7 +54,9 @@
         var svg = d3.select("svg");
         var svgGroup = svg.append("g");
 
-        DagreFlow.init(svg, g, {
+        DagreFlow.init({
+            svg: svg,
+            graph: g,
             shortLabels: true
         });
         DagreFlow.render();

@@ -51,22 +51,87 @@ var DagreFlow =
 	    'use strict';
 	
 	    var Options = __webpack_require__(1);
-	    var GraphModel = __webpack_require__(2);
-	    var Icons = __webpack_require__(3);
-	    var Zoom = __webpack_require__(4);
+	    var Render = __webpack_require__(2);
+	    var GraphModel = __webpack_require__(3);
+	
+	    var init = function init(_options) {
+	        Options.init(_options);
+	        Render.init();
+	    };
+	
+	    var render = function render() {
+	        Render.render();
+	    };
+	
+	    var setNodeStatus = function setNodeStatus(nodeId, status) {
+	        Render.setNodeStatus(nodeId, status);
+	    };
+	
+	    var getFlow = function getFlow() {
+	        return GraphModel.getNodes();
+	    };
+	
+	    module.exports = {
+	        init: init,
+	        render: render,
+	        setNodeStatus: setNodeStatus,
+	        getFlow: getFlow
+	    };
+	})();
+
+/***/ },
+/* 1 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	(function () {
+	    "use strict";
+	
+	    var options = {
+	        shortLabels: false,
+	        shortLabelLength: 4,
+	        statuses: ['SUCCESS', 'FAILED', 'PENDING', 'RUNNING']
+	    };
+	
+	    var init = function init(_options) {
+	        options = _.extend(options, _options);
+	    };
+	
+	    var get = function get(name) {
+	        return options[name];
+	    };
+	
+	    module.exports = {
+	        init: init,
+	        get: get
+	    };
+	})();
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	(function () {
+	    "use strict";
+	
+	    var Options = __webpack_require__(1);
+	    var GraphModel = __webpack_require__(3);
+	    var Icons = __webpack_require__(4);
+	    var Zoom = __webpack_require__(5);
 	
 	    var svg;
 	    var svgGroup;
 	    var graph;
 	    var renderer;
 	
-	    var init = function init(_svg, _graph, _options) {
-	        svg = _svg;
-	        svgGroup = _svg.select('g');
-	        graph = _graph;
+	    var init = function init() {
+	        svg = Options.get('svg');
+	        svgGroup = svg.select('g');
+	        graph = Options.get('graph');
 	        renderer = new dagreD3.render();
-	
-	        Options.init(_options);
 	
 	        GraphModel.create(graph);
 	    };
@@ -472,36 +537,7 @@ var DagreFlow =
 	})();
 
 /***/ },
-/* 1 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	(function () {
-	    "use strict";
-	
-	    var options = {
-	        shortLabels: false,
-	        shortLabelLength: 4,
-	        statuses: ['SUCCESS', 'FAILED', 'PENDING', 'RUNNING']
-	    };
-	
-	    var init = function init(_options) {
-	        options = _.extend(options, _options);
-	    };
-	
-	    var get = function get(name) {
-	        return options[name];
-	    };
-	
-	    module.exports = {
-	        init: init,
-	        get: get
-	    };
-	})();
-
-/***/ },
-/* 2 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -990,7 +1026,7 @@ var DagreFlow =
 	})();
 
 /***/ },
-/* 3 */
+/* 4 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1009,7 +1045,7 @@ var DagreFlow =
 	})();
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports) {
 
 	"use strict";
