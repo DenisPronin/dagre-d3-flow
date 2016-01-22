@@ -1,6 +1,8 @@
 (function () {
     'use strict';
 
+    require('../vendors/polyfills/getTransformToElement');
+    require('../vendors/polyfills/pathseg');
     var Options = require('./options');
     var Render = require('./render');
     var GraphModel = require('./graph.model');
