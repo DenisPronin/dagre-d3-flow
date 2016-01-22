@@ -18,6 +18,11 @@
         Render.setNodeStatus(nodeId, status);
     };
 
+    var setNodeLabel = function (nodeId, label) {
+        Render.setNodeLabel(nodeId, label);
+
+    };
+
     var getFlow = function () {
         return GraphModel.getNodes();
     };
@@ -26,6 +31,7 @@
         init: init,
         render: render,
         setNodeStatus: setNodeStatus,
+        setNodeLabel: setNodeLabel,
         getFlow: getFlow
     };
 

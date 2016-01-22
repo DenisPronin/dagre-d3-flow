@@ -81,6 +81,11 @@
         $nodeElem.classed(status, true);
     };
 
+    var setNodeLabel = function (nodeId, label) {
+        let $nodeElem = findNodeElem(nodeId);
+        $nodeElem.select('tspan').text(label);
+    };
+
     var setEdgesInterpolation = function () {
         for(let key of Object.keys(graph._edgeLabels)) {
             let edgeLabel = graph._edgeLabels[key];
@@ -250,6 +255,7 @@
     module.exports = {
         init: init,
         render: render,
+        setNodeLabel: setNodeLabel,
         setNodeStatus: setNodeStatus
     };
 })();

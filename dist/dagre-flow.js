@@ -67,6 +67,10 @@ var DagreFlow =
 	        Render.setNodeStatus(nodeId, status);
 	    };
 	
+	    var setNodeLabel = function setNodeLabel(nodeId, label) {
+	        Render.setNodeLabel(nodeId, label);
+	    };
+	
 	    var getFlow = function getFlow() {
 	        return GraphModel.getNodes();
 	    };
@@ -75,6 +79,7 @@ var DagreFlow =
 	        init: init,
 	        render: render,
 	        setNodeStatus: setNodeStatus,
+	        setNodeLabel: setNodeLabel,
 	        getFlow: getFlow
 	    };
 	})();
@@ -235,6 +240,11 @@ var DagreFlow =
 	        }
 	
 	        $nodeElem.classed(status, true);
+	    };
+	
+	    var setNodeLabel = function setNodeLabel(nodeId, label) {
+	        var $nodeElem = findNodeElem(nodeId);
+	        $nodeElem.select('tspan').text(label);
 	    };
 	
 	    var setEdgesInterpolation = function setEdgesInterpolation() {
@@ -532,6 +542,7 @@ var DagreFlow =
 	    module.exports = {
 	        init: init,
 	        render: render,
+	        setNodeLabel: setNodeLabel,
 	        setNodeStatus: setNodeStatus
 	    };
 	})();
