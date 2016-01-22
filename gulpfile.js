@@ -6,6 +6,7 @@ var jshint = require('gulp-jshint');
 var concat = require('gulp-concat');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
+var gutil = require('gulp-util');
 
 var sass = require('gulp-sass');
 var scsslint = require('gulp-scss-lint');
@@ -96,7 +97,7 @@ gulp.task('js', function() {
                 loaders: [{
                     test: /\.js$/,
                     exclude: /(node_modules|bower_components)/,
-                    loader: "babel-loader"
+                    loader: "babel"
                 }]
             }
         }))
@@ -107,7 +108,7 @@ gulp.task('js', function() {
 gulp.task('js_min', ['js'], function () {
     return gulp.src(paths.js.res)
         .pipe(rename({suffix: '.min'}))
-        .pipe(uglify())
+        .pipe(uglify().on('error', gutil.log))
         .pipe(gulp.dest(paths.js.distPath))
         .pipe(connect.reload());
 
